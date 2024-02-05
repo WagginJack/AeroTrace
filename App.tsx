@@ -2,7 +2,7 @@ import React from 'react';
 import BleManager from 'react-native-ble-manager';
 
 
-import { View, StyleSheet, TouchableOpacity, Image, Text, Platform } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image, Text, Platform, Dimensions} from 'react-native';
 
 const App: React.FC = () => {
   return (
@@ -13,7 +13,7 @@ const App: React.FC = () => {
       }
     
     ]}>
-      <Image source={require('./AeroTrace_Banner.svg')} style={styles.banner} />
+      <Image source={require('./AeroTrace_Banner1.png')} style={styles.banner} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Velocity</Text>
@@ -37,8 +37,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   banner: {
-    width: '100%',
-    height: 100, // Adjust the height as needed
+    
+    width: Dimensions.get('window').width, //width is the width of the window size
+    height: 347 * (Dimensions.get('window').width)/1585, //height is the actual pixel height times the ratio
+     // Adjust the height as needed
   },
   buttonContainer: {
     alignItems: 'center',
