@@ -13,7 +13,7 @@ const App: React.FC = () => {
       }
     
     ]}>
-      <Image source={require('./AeroTrace_Banner.png')} style={styles.banner} />
+      <Image source={require('./AeroTrace_Banner.svg')} style={styles.banner} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Velocity</Text>
