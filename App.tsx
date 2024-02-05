@@ -1,4 +1,6 @@
 import React from 'react';
+import BleManager from 'react-native-ble-manager';
+
 import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
 
 const App: React.FC = () => {
