@@ -1,11 +1,18 @@
 import React from 'react';
 import BleManager from 'react-native-ble-manager';
 
-import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
+
+import { View, StyleSheet, TouchableOpacity, Image, Text, Platform } from 'react-native';
 
 const App: React.FC = () => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,
+    
+      { 
+        marginTop: Platform.OS === "ios" ? 40 : 0 
+      }
+    
+    ]}>
       <Image source={require('./AeroTrace_Banner.png')} style={styles.banner} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button}>
