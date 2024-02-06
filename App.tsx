@@ -13,7 +13,7 @@ const App: React.FC = () => {
       }
     
     ]}>
-      <Image source={require('./AeroTrace_Banner1.png')} style={styles.banner} />
+      <Image source={require('./AeroTrace_Banner2.png')} style={styles.banner} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Velocity</Text>
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   banner: {
     
     width: Dimensions.get('window').width, //width is the width of the window size
-    height: 347 * (Dimensions.get('window').width)/1585, //height is the actual pixel height times the ratio
+    height: 347 * (Dimensions.get('window').width)/1660, //height is the actual pixel height times the ratio
      // Adjust the height as needed
   },
   buttonContainer: {
