@@ -1,0 +1,6 @@
+module Pods_AeroTrace_AeroTraceTests {
+  umbrella header "Pods-AeroTrace-AeroTraceTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
