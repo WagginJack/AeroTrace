@@ -29,4 +29,5 @@ com.aerotrace.app-packageDebugResources-27 C:\Users\Aero\Desktop\AeroTrace\andro
 com.aerotrace.app-merged_res-28 C:\Users\Aero\Desktop\AeroTrace\android\app\build\intermediates\merged_res\debug
 com.aerotrace.app-debug-29 C:\Users\Aero\Desktop\AeroTrace\android\app\src\debug\res
 com.aerotrace.app-main-30 C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\res
-com.aerotrace.app-packaged_res-31 C:\Users\Aero\Desktop\AeroTrace\node_modules\react-native-ble-manager\android\build\intermediates\packaged_res\debug
+com.aerotrace.app-packaged_res-31 C:\Users\Aero\Desktop\AeroTrace\node_modules\@react-native-picker\picker\android\build\intermediates\packaged_res\debug
+com.aerotrace.app-packaged_res-32 C:\Users\Aero\Desktop\AeroTrace\node_modules\react-native-ble-manager\android\build\intermediates\packaged_res\debug
