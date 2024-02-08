@@ -9,7 +9,7 @@ const App: React.FC = () => {
     <View style={[styles.container,
     
       { 
-        marginTop: Platform.OS === "ios" ? 40 : 0 
+        marginTop: Platform.OS === "ios" ? 50 : 10 
       }
     
     ]}>

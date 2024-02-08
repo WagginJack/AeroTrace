@@ -1,0 +1,134 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.aerotrace"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="34" />
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:3:5-67
+11-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:3:22-64
+12    <uses-permission android:name="android.permission.BLUETOOTH" />
+12-->[:react-native-ble-manager] C:\Users\Aero\Desktop\AeroTrace\node_modules\react-native-ble-manager\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-68
+12-->[:react-native-ble-manager] C:\Users\Aero\Desktop\AeroTrace\node_modules\react-native-ble-manager\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:7:22-65
+13    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+13-->[:react-native-ble-manager] C:\Users\Aero\Desktop\AeroTrace\node_modules\react-native-ble-manager\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:5-74
+13-->[:react-native-ble-manager] C:\Users\Aero\Desktop\AeroTrace\node_modules\react-native-ble-manager\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:22-71
+14    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+14-->[:react-native-ble-manager] C:\Users\Aero\Desktop\AeroTrace\node_modules\react-native-ble-manager\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-81
+14-->[:react-native-ble-manager] C:\Users\Aero\Desktop\AeroTrace\node_modules\react-native-ble-manager\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:22-78
+15
+16    <uses-feature
+16-->[:react-native-ble-manager] C:\Users\Aero\Desktop\AeroTrace\node_modules\react-native-ble-manager\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:5-13:36
+17        android:name="android.hardware.bluetooth_le"
+17-->[:react-native-ble-manager] C:\Users\Aero\Desktop\AeroTrace\node_modules\react-native-ble-manager\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:12:9-53
+18        android:required="false" />
+18-->[:react-native-ble-manager] C:\Users\Aero\Desktop\AeroTrace\node_modules\react-native-ble-manager\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:13:9-33
+19    <!--
+20    This manifest file is used only by Gradle to configure debug-only capabilities
+21    for React Native Apps.
+22    -->
+23    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+23-->[com.facebook.react:react-android:0.73.4] C:\Users\Aero\.gradle\caches\transforms-3\b4db2f23f2ab214a51186ce21dfe946e\transformed\jetified-react-android-0.73.4-debug\AndroidManifest.xml:16:5-78
+23-->[com.facebook.react:react-android:0.73.4] C:\Users\Aero\.gradle\caches\transforms-3\b4db2f23f2ab214a51186ce21dfe946e\transformed\jetified-react-android-0.73.4-debug\AndroidManifest.xml:16:22-75
+24    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+24-->[com.facebook.flipper:flipper:0.201.0] C:\Users\Aero\.gradle\caches\transforms-3\9b2c28bd5719adb7e465469e2ca76c12\transformed\jetified-flipper-0.201.0\AndroidManifest.xml:14:5-76
+24-->[com.facebook.flipper:flipper:0.201.0] C:\Users\Aero\.gradle\caches\transforms-3\9b2c28bd5719adb7e465469e2ca76c12\transformed\jetified-flipper-0.201.0\AndroidManifest.xml:14:22-73
+25
+26    <permission
+26-->[androidx.core:core:1.9.0] C:\Users\Aero\.gradle\caches\transforms-3\13659b94c66de92d98d7f8af61234b95\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
+27        android:name="com.aerotrace.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+27-->[androidx.core:core:1.9.0] C:\Users\Aero\.gradle\caches\transforms-3\13659b94c66de92d98d7f8af61234b95\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
+28        android:protectionLevel="signature" />
+28-->[androidx.core:core:1.9.0] C:\Users\Aero\.gradle\caches\transforms-3\13659b94c66de92d98d7f8af61234b95\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
+29
+30    <uses-permission android:name="com.aerotrace.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+30-->[androidx.core:core:1.9.0] C:\Users\Aero\.gradle\caches\transforms-3\13659b94c66de92d98d7f8af61234b95\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
+30-->[androidx.core:core:1.9.0] C:\Users\Aero\.gradle\caches\transforms-3\13659b94c66de92d98d7f8af61234b95\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
+31
+32    <application
+32-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:5:5-24:19
+33        android:name="com.aerotrace.MainApplication"
+33-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:6:7-38
+34        android:allowBackup="false"
+34-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:10:7-34
+35        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+35-->[androidx.core:core:1.9.0] C:\Users\Aero\.gradle\caches\transforms-3\13659b94c66de92d98d7f8af61234b95\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
+36        android:debuggable="true"
+37        android:extractNativeLibs="true"
+38        android:icon="@mipmap/aerotrace_logo_icon"
+38-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:8:7-49
+39        android:label="@string/app_name"
+39-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:7:7-39
+40        android:roundIcon="@mipmap/aerotrace_logo_icon_round"
+40-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:9:7-60
+41        android:theme="@style/AppTheme"
+41-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:11:7-38
+42        android:usesCleartextTraffic="true" >
+42-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\debug\AndroidManifest.xml:6:9-44
+43        <activity
+43-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:12:7-23:18
+44            android:name="com.aerotrace.MainActivity"
+44-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:13:9-37
+45            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+45-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:15:9-118
+46            android:exported="true"
+46-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:18:9-32
+47            android:label="@string/app_name"
+47-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:14:9-41
+48            android:launchMode="singleTask"
+48-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:16:9-40
+49            android:windowSoftInputMode="adjustResize" >
+49-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:17:9-51
+50            <intent-filter>
+50-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:19:9-22:25
+51                <action android:name="android.intent.action.MAIN" />
+51-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:20:13-65
+51-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:20:21-62
+52
+53                <category android:name="android.intent.category.LAUNCHER" />
+53-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:21:13-73
+53-->C:\Users\Aero\Desktop\AeroTrace\android\app\src\main\AndroidManifest.xml:21:23-70
+54            </intent-filter>
+55        </activity>
+56        <activity
+56-->[com.facebook.react:react-android:0.73.4] C:\Users\Aero\.gradle\caches\transforms-3\b4db2f23f2ab214a51186ce21dfe946e\transformed\jetified-react-android-0.73.4-debug\AndroidManifest.xml:19:9-21:40
+57            android:name="com.facebook.react.devsupport.DevSettingsActivity"
+57-->[com.facebook.react:react-android:0.73.4] C:\Users\Aero\.gradle\caches\transforms-3\b4db2f23f2ab214a51186ce21dfe946e\transformed\jetified-react-android-0.73.4-debug\AndroidManifest.xml:20:13-77
+58            android:exported="false" />
+58-->[com.facebook.react:react-android:0.73.4] C:\Users\Aero\.gradle\caches\transforms-3\b4db2f23f2ab214a51186ce21dfe946e\transformed\jetified-react-android-0.73.4-debug\AndroidManifest.xml:21:13-37
+59
+60        <provider
+60-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Aero\.gradle\caches\transforms-3\faa3592d2fc203d6c74b9a5f601058a1\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+61            android:name="androidx.startup.InitializationProvider"
+61-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Aero\.gradle\caches\transforms-3\faa3592d2fc203d6c74b9a5f601058a1\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
+62            android:authorities="com.aerotrace.androidx-startup"
+62-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Aero\.gradle\caches\transforms-3\faa3592d2fc203d6c74b9a5f601058a1\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
+63            android:exported="false" >
+63-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Aero\.gradle\caches\transforms-3\faa3592d2fc203d6c74b9a5f601058a1\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
+64            <meta-data
+64-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Aero\.gradle\caches\transforms-3\faa3592d2fc203d6c74b9a5f601058a1\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+65                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+65-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Aero\.gradle\caches\transforms-3\faa3592d2fc203d6c74b9a5f601058a1\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
+66                android:value="androidx.startup" />
+66-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Aero\.gradle\caches\transforms-3\faa3592d2fc203d6c74b9a5f601058a1\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
+67            <meta-data
+67-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Aero\.gradle\caches\transforms-3\71b91ea8216105cda74b0317da307340\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+68                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+68-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Aero\.gradle\caches\transforms-3\71b91ea8216105cda74b0317da307340\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+69                android:value="androidx.startup" />
+69-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\Aero\.gradle\caches\transforms-3\71b91ea8216105cda74b0317da307340\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+70        </provider>
+71
+72        <meta-data
+72-->[com.facebook.soloader:soloader:0.10.5] C:\Users\Aero\.gradle\caches\transforms-3\03d018e18e7118763cc731de8f689ba0\transformed\jetified-soloader-0.10.5\AndroidManifest.xml:12:9-14:37
+73            android:name="com.facebook.soloader.enabled"
+73-->[com.facebook.soloader:soloader:0.10.5] C:\Users\Aero\.gradle\caches\transforms-3\03d018e18e7118763cc731de8f689ba0\transformed\jetified-soloader-0.10.5\AndroidManifest.xml:13:13-57
+74            android:value="false" />
+74-->[com.facebook.soloader:soloader:0.10.5] C:\Users\Aero\.gradle\caches\transforms-3\03d018e18e7118763cc731de8f689ba0\transformed\jetified-soloader-0.10.5\AndroidManifest.xml:14:13-34
+75    </application>
+76
+77</manifest>
