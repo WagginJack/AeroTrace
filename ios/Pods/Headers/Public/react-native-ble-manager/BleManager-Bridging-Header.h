@@ -1,1 +1,0 @@
-../../../../../node_modules/react-native-ble-manager/ios/BleManager-Bridging-Header.h
