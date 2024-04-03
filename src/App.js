@@ -1,5 +1,5 @@
 import React from 'react';
-// import type { PropsWithChildren} from 'react';
+// import type { PropsWithChildren} from 'react';Push to Mac
 import {
   SafeAreaView,
   ScrollView,
