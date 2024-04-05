@@ -59,15 +59,15 @@ const styles = StyleSheet.create({
         height: 250,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#71dc71",
+        // backgroundColor: "#71dc71",
     },
     bluetooth: {
         width: 50,
         height: 50,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#71dc71",
-        // when bluetooth is disconected use #dc7171
+        backgroundColor: "#dc7171",
+        // when bluetooth is conected use #71dc71
         borderRadius: 25
     },
 })
