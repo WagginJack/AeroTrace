@@ -216,7 +216,7 @@ const Bluetooth = () => {
       <View >
         <Text
           >
-          React Native BLE Manager Tutorial
+          Bluetooth Connect
         </Text>
         <TouchableOpacity
           onPress={scan}
