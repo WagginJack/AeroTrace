@@ -1,75 +1,8 @@
-// import { View, Text, StyleSheet ,
-//     Platform,
-//     NativeModules,
-//     useColorScheme,
-//     NativeEventEmitter,
-//     PermissionsAndroid,
-//   } from 'react-native';
-// import React from 'react'
-// import BleManager from 'react-native-ble-manager';
-// import { NavigationContainer } from "@react-navigation/native"
-
-
-// BleManager.start({ showAlert: false }).then(() => {
-//     // Success code
-//     console.log("Module initialized");
-//   });
-
-
-// //   BleManager.scan([], 5, true).then(() => {
-// //     // Success code
-// //     console.log("Scan started");
-// //   });
-
-// const Bluetooth = () => {
-//     BleManager.enableBluetooth()
-//         .then(() => {
-//             // Success code
-//             console.log("The bluetooth is already enabled or the user confirm");
-//         })
-//         .catch((error) => {
-//             // Failure code
-//             console.log("The user refuse to enable bluetooth");
-//         });
-//     BleManager.scan([], 5, true).then(() => {
-//         //success
-//         console.log("Scan Started")
-//     });
-
-//     BleManager.stopScan().then(() => {
-//         // Success code
-//         console.log("Scan stopped");
-//       });
-
-//     return (
-//         <View>
-//             <Text>Configure Bluetooth here</Text>
-//         </View>
-//     )
-// }
-
-// export default Bluetooth
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         alignItems: "center",
-//         justifyContent: "center"
-//     },
-//     smallText: {
-//         color: "#000000"
-//     }
-// })
-
-/*
-
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-native/no-inline-styles */
-
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   Alert,
+  ScrollView,
   View,
   FlatList,
   Platform,
@@ -80,9 +13,12 @@ import {
   TouchableOpacity,
   NativeEventEmitter,
   PermissionsAndroid,
+  StyleSheet,
+  Dimensions,
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
-import {DeviceList} from '../../components/DeviceList';
+import { DeviceList } from '../../components/DeviceList';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const BleManagerModule = NativeModules.BleManager;
 const BleManagerEmitter = new NativeEventEmitter(BleManagerModule);
@@ -129,7 +65,7 @@ const Bluetooth = () => {
       console.log('Bluetooth is turned on!');
     });
 
-    BleManager.start({showAlert: false}).then(() => {
+    BleManager.start({ showAlert: false }).then(() => {
       console.log('BleManager initialized');
       handleGetConnectedDevices();
     });
@@ -208,33 +144,46 @@ const Bluetooth = () => {
   };
 
   const isDarkMode = useColorScheme() === 'dark';
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  };
 
   return (
-    <SafeAreaView >
+    <SafeAreaView style={[backgroundStyle, styles.container]}>
       <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View >
+      <View style={{ pdadingHorizontal: 20 }}>
         <Text
-          >
+          style={[
+            styles.title,
+            { color: isDarkMode ? Colors.white : Colors.black },
+          ]}>
           Bluetooth Connect
         </Text>
         <TouchableOpacity
           onPress={scan}
           activeOpacity={0.5}
-          >
-          <Text >
+          style={styles.scanButton}
+        >
+          <Text style={styles.scanButtonText}>
             {isScanning ? 'Scanning...' : 'Scan Bluetooth Devices'}
           </Text>
         </TouchableOpacity>
 
         <Text
-          >
+          style={[
+            styles.subtitle,
+            { color: isDarkMode ? Colors.white : Colors.black },
+          ]}>
           Discovered Devices:
         </Text>
         {discoveredDevices.length > 0 ? (
           <FlatList
+          style={styles.FlatList}
             data={discoveredDevices}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <DeviceList
                 peripheral={item}
                 connect={connect}
@@ -244,17 +193,21 @@ const Bluetooth = () => {
             keyExtractor={item => item.id}
           />
         ) : (
-          <Text >No Bluetooth devices found</Text>
+          <Text style={styles.noDevicesText}>No Bluetooth devices found</Text>
         )}
 
         <Text
-          >
+          style={[
+            styles.subtitle,
+            { color: isDarkMode ? Colors.white : Colors.black },
+          ]}>
           Connected Devices:
         </Text>
         {connectedDevices.length > 0 ? (
           <FlatList
+          style={styles.FlatList}
             data={connectedDevices}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <DeviceList
                 peripheral={item}
                 connect={connect}
@@ -264,7 +217,7 @@ const Bluetooth = () => {
             keyExtractor={item => item.id}
           />
         ) : (
-          <Text >No connected devices</Text>
+          <Text style={styles.noDevicesText}>No connected devices</Text>
         )}
       </View>
     </SafeAreaView>
@@ -272,6 +225,48 @@ const Bluetooth = () => {
 };
 
 export default Bluetooth;
+
+const windowHeight = Dimensions.get('window').height;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    height: windowHeight,
+    paddingHorizontal: 10,
+  },
+  scrollContainer: {
+    padding: 16,
+  },
+  title: {
+    fontSize: 30,
+    textAlign: 'center',
+    marginBottom: 20,
+    marginTop: 40,
+  },
+  subtitle: {
+    fontSize: 24,
+    marginBottom: 10,
+    marginTop: 20,
+  },
+  scanButton: {
+    backgroundColor: '#71dc71',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  scanButtonText: {
+    color: 'white',
+    textAlign: 'center',
+  },
+  noDevicesText: {
+    textAlign: 'center',
+    marginTop: 10,
+    fontStyle: 'italic',
+  },
+  FlatList: {
+    maxHeight: 150,
+  }
+})
 
 // /**
 //  * Sample React Native App
