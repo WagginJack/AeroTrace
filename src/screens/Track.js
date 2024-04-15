@@ -6,7 +6,6 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 const Track = ({ navigation }) => {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Track screen</Text>
             <View style={styles.bluetooth}>
                 <ImageButton
                     onPress={() => navigation.navigate('Bluetooth')}
@@ -32,6 +31,7 @@ const Track = ({ navigation }) => {
             <Text>Altitude: _____ ft</Text>
             <Text>Distance: _____ ft</Text>
             <Button
+                color="#71dc71"
                 title="reset"
                 onPress={() => console.log("Reset Button Pressed")}
             />
@@ -59,15 +59,15 @@ const styles = StyleSheet.create({
         height: 250,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#71dc71",
+        // backgroundColor: "#71dc71",
     },
     bluetooth: {
         width: 50,
         height: 50,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#71dc71",
-        // when bluetooth is disconected use #dc7171
+        backgroundColor: "#dc7171",
+        // when bluetooth is conected use #71dc71
         borderRadius: 25
     },
 })
