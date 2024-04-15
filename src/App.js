@@ -1,5 +1,5 @@
 import React from 'react';
-import { AntDesign } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/AntDesign';  
 // import type { PropsWithChildren} from 'react';Push to Mac
 import {
   SafeAreaView,
@@ -40,27 +40,29 @@ function App() {
           name='HomeStack'
           component={HomeStack}
           options={{
-            tabBarShowLabel: false,
+            tabBarShowLabel: true,
+            title: "Home",
             headerShown: false,
-            tabBarIcon: () => (
-              <AntDesign name="home" size={24} color="black" />
-            ),
+            tabBarIcon: () => <Icon name="home" size={25}/>,
           }}
         />
         <Tab.Screen
           name='TrackStack'
           component={TrackStack}
           options={{
-            tabBarShowLabel: false,
-            headerShown: false
+            tabBarShowLabel: true,
+            title: "Track",
+            headerShown: false,
+            tabBarIcon: () => <Icon name="enviromento" size={25}/>,
           }}
         />
         <Tab.Screen
-          name='Settings'
+          name='Setting'
           component={Settings}
           options={{
-            tabBarShowLabel: false,
-            title: "Settings"
+            tabBarShowLabel: true,
+            title: "Settings",
+            tabBarIcon: () => <Icon name="setting" size={25}/>,
           }}
         />
       </Tab.Navigator>
