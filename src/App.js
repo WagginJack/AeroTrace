@@ -1,4 +1,5 @@
 import React from 'react';
+import { AntDesign } from '@expo/vector-icons';
 // import type { PropsWithChildren} from 'react';Push to Mac
 import {
   SafeAreaView,
@@ -40,7 +41,10 @@ function App() {
           component={HomeStack}
           options={{
             tabBarShowLabel: false,
-            headerShown: false
+            headerShown: false,
+            tabBarIcon: () => (
+              <AntDesign name="home" size={24} color="black" />
+            ),
           }}
         />
         <Tab.Screen
