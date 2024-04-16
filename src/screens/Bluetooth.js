@@ -16,7 +16,7 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import BleManager from 'react-native-ble-manager';//still planning to use PLX Instead of this 
+import BleManager from 'react-native-ble-manager';//still planning to use PLX Instead of this today
 import { DeviceList } from '../../components/DeviceList';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
