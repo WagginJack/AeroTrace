@@ -122,6 +122,23 @@ const Bluetooth = () => {
         setConnectedDevices(Array.from(devices));
         setDiscoveredDevices(Array.from(devices));
         console.log('BLE device paired successfully');
+          while(1){
+            //console.log("Initializing READ...")
+            BleManager.read(peripheral.id, "6E400001-B5A3-F393-E0A9-E50E24DCCA9E", "6E400002-B5A3-F393-E0A9-E50E24DCCA9E")
+            .then((data) => {
+              console.log("got to here")
+              console.log("received Message: ", data);
+              /*if (serviceType == "question") {
+                BleManager.startNotification(peripheral.id, serviceUUID, characteristicUUID[serviceType])
+                  .then(() => {
+                    console.log("Notify Answer started!");
+                  })
+                  .catch((error) => {
+                    console.log("Error starting notification: ", error);
+                  })
+              }*/
+            })
+          }
       })
       .catch(() => {
         throw Error('failed to bond');
