@@ -1,188 +1,112 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Text,
-  Alert,
-  ScrollView,
-  View,
-  FlatList,
-  Platform,
-  StatusBar,
-  SafeAreaView,
-  NativeModules,
-  useColorScheme,
-  TouchableOpacity,
-  NativeEventEmitter,
-  PermissionsAndroid,
-  StyleSheet,
-  Dimensions,
-} from 'react-native';
-import BleManager from 'react-native-ble-manager';//still planning to use PLX Instead of this today
-import { DeviceList } from '../../components/DeviceList';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { View, Text, Button, FlatList } from 'react-native';
+import BleManager from 'react-native-ble-manager';
 
-const BleManagerModule = NativeModules.BleManager;
-const BleManagerEmitter = new NativeEventEmitter(BleManagerModule);
+const Bluetooth = () => {
+  const [devices, setDevices] = useState([]);
+  const [scanning, setScanning] = useState(false);
 
-const BLEService = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E";
-const BLERead = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E";
+  useEffect(() => {
+    BleManager.start({ showAlert: false });
 
-connect(peripheralId) {
-  return new Promise((fulfill, reject) => {
-      bleManager.connect(peripheralId, (error) => {
-          if (error) {
-              reject(error);
-          } else {
-              fulfill();
-          }
+    return () => {
+      BleManager.stopScan();
+    };
+  }, []);
+
+  const startScan = () => {
+    setScanning(true);
+    BleManager.scan([], 10, true).then(() => {
+      console.log('Scanning...');
+    });
+  
+    setTimeout(() => {
+      setScanning(false);
+      BleManager.getDiscoveredPeripherals([]).then((results) => {
+        // Filter out devices with name "UNKNOWN"
+        const filteredResults = results.filter((device) => device.name !== null);
+        setDevices(filteredResults);
+  
+        // Log the name of each discovered device
+        filteredResults.forEach((device) => {
+          console.log(device.name);
+        });
       });
-  });
-}
-
-disconnect(peripheralId) {
-  return new Promise((fulfill, reject) => {
-      bleManager.disconnect(peripheralId, (error) => {
-          if (error) {
-              reject(error);
-          } else {
-              fulfill();
-          }
-      });
-  });
-}
-
-read(peripheralId, serviceUUID, characteristicUUID) {
-  return new Promise((fulfill, reject) => {
-      BleManager.read(peripheralId, serviceUUID, characteristicUUID, (error, data) => {
-          if (error) {
-              reject(error);
-          } else {
-              fulfill(data);
-          }
-      });
-  });
-}
-
-  const isDarkMode = useColorScheme() === 'dark';
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    }, 10000);
   };
+  
+
+  const connectToDevice = (device) => {
+    BleManager.connect(device.id).then(() => {
+      console.log('Connected to', device.name);
+      BleManager.retrieveServices(device.id).then((peripheralInfo) => {
+        console.log('Peripheral info:', peripheralInfo);
+        
+        if (peripheralInfo.services && peripheralInfo.services.length > 0) { // Check if services array exists and is not empty
+          // Look for the service UUID you're interested in
+          const serviceUUID = 'adaf0001-4369-7263-7569-74507974686e';
+          const characteristicUUID = 'adaf0003-4369-7263-7569-74507974686e';
+          
+          // Find the service that matches the UUID
+          const service = peripheralInfo.services.find((s) => s.uuid === serviceUUID);
+          
+          if (service) {
+            // Check if characteristics array exists and is not empty
+            if (service.characteristics && service.characteristics.length > 0) {
+              // Find the characteristic within the service
+              const characteristic = service.characteristics.find((c) => c.characteristic === characteristicUUID);
+              
+              if (characteristic) {
+                // Enable notifications for the characteristic
+                BleManager.startNotification(device.id, serviceUUID, characteristicUUID)
+                  .then(() => {
+                    console.log('Notifications started');
+                    
+                    // Listen for notifications
+                    BleManager.onNotification(device.id, serviceUUID, characteristicUUID, (data) => {
+                      console.log('Notification:', data);
+                      // You can handle the received notification data here
+                    });
+                  })
+                  .catch((error) => {
+                    console.error('Notification error', error);
+                  });
+              } else {
+                console.error('Characteristic not found');
+              }
+            } else {
+              console.error('No characteristics found in the service');
+            }
+          } else {
+            console.error('Service not found');
+          }
+        } else {
+          console.error('No services found');
+        }
+      });
+    }).catch((error) => {
+      console.error('Connection error', error);
+    });
+  }; 
+  
+
+  const renderItem = ({ item }) => (
+    <Button
+      title={`${item.name || 'Unknown'} (${item.id})`}
+      onPress={() => connectToDevice(item)}
+    />
+  );
 
   return (
-    <SafeAreaView style={[backgroundStyle, styles.container]}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Button title={scanning ? 'Scanning...' : 'Start Scan'} onPress={startScan} disabled={scanning} />
+      <FlatList
+        data={devices}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
       />
-      <View style={{ pdadingHorizontal: 20 }}>
-        <Text
-          style={[
-            styles.title,
-            { color: isDarkMode ? Colors.white : Colors.black },
-          ]}>
-          Bluetooth Connect
-        </Text>
-        <TouchableOpacity
-          onPress={scan}
-          activeOpacity={0.5}
-          style={styles.scanButton}
-        >
-          <Text style={styles.scanButtonText}>
-            {isScanning ? 'Scanning...' : 'Scan Bluetooth Devices'}
-          </Text>
-        </TouchableOpacity>
-
-        <Text
-          style={[
-            styles.subtitle,
-            { color: isDarkMode ? Colors.white : Colors.black },
-          ]}>
-          Discovered Devices:
-        </Text>
-        {discoveredDevices.length > 0 ? (
-          <FlatList
-          style={styles.FlatList}
-            data={discoveredDevices}
-            renderItem={({ item }) => (
-              <DeviceList
-                peripheral={item}
-                connect={connect}
-                disconnect={disconnect}
-              />
-            )}
-            keyExtractor={item => item.id}
-          />
-        ) : (
-          <Text style={styles.noDevicesText}>No Bluetooth devices found</Text>
-        )}
-
-        <Text
-          style={[
-            styles.subtitle,
-            { color: isDarkMode ? Colors.white : Colors.black },
-          ]}>
-          Connected Devices:
-        </Text>
-        {connectedDevices.length > 0 ? (
-          <FlatList
-          style={styles.FlatList}
-            data={connectedDevices}
-            renderItem={({ item }) => (
-              <DeviceList
-                peripheral={item}
-                connect={connect}
-                disconnect={disconnect}
-              />
-            )}
-            keyExtractor={item => item.id}
-          />
-        ) : (
-          <Text style={styles.noDevicesText}>No connected devices</Text>
-        )}
-      </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
 export default Bluetooth;
-
-const windowHeight = Dimensions.get('window').height;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: windowHeight,
-    paddingHorizontal: 10,
-  },
-  scrollContainer: {
-    padding: 16,
-  },
-  title: {
-    fontSize: 30,
-    textAlign: 'center',
-    marginBottom: 20,
-    marginTop: 40,
-  },
-  subtitle: {
-    fontSize: 24,
-    marginBottom: 10,
-    marginTop: 20,
-  },
-  scanButton: {
-    backgroundColor: '#71dc71',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 20,
-  },
-  scanButtonText: {
-    color: 'white',
-    textAlign: 'center',
-  },
-  noDevicesText: {
-    textAlign: 'center',
-    marginTop: 10,
-    fontStyle: 'italic',
-  },
-  FlatList: {
-    maxHeight: 150,
-  }
-})
