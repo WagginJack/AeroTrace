@@ -44,7 +44,7 @@ const Bluetooth = () => {
       // Clean up the listener on component unmount
       return () => subscription.remove();
     }
-  }, [NotificationOn]); // Re-run the effect when `NotificationOn` changes
+  }, [NotificationOn && NotificationOn == true]); // Re-run the effect when `NotificationOn` changes to true
 
   const startScan = () => {
     setScanning(true);
