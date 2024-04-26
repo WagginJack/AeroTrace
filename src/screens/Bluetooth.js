@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, FlatList } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 
+let BLEid = ''
+
 const Bluetooth = () => {
   const [devices, setDevices] = useState([]);
   const [scanning, setScanning] = useState(false);
@@ -37,6 +39,7 @@ const Bluetooth = () => {
   
   const connectToDevice = (device) => {
     BleManager.connect(device.id).then(() => {
+      BLEid = device.id;
       console.log('Connected to device:', device.name);
       BleManager.retrieveServices(device.id).then((peripheralInfo) => {
         console.log('Peripheral info:', peripheralInfo);
