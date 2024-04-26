@@ -2,10 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, FlatList } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 
-import { NativeEventEmitter, NativeModules } from 'react-native'; //test
-const { BleManagerModule } = NativeModules;
-const bleManagerEmitter = new NativeEventEmitter(BleManagerModule); //test
-
 const Bluetooth = () => {
   const [devices, setDevices] = useState([]);
   const [scanning, setScanning] = useState(false);
@@ -40,36 +36,23 @@ const Bluetooth = () => {
   };
   
   const connectToDevice = (device) => {
-    BleManager.connect(device.id)
-      .then(() => {
-        return BleManager.retrieveServices(device.id);
-      })
-      .then((peripheralInfo) => {
-        // Assuming the service and characteristic UUIDs
+    BleManager.connect(device.id).then(() => {
+      console.log('Connected to device:', device.name);
+      BleManager.retrieveServices(device.id).then((peripheralInfo) => {
+        console.log('Peripheral info:', peripheralInfo);
         const serviceUUID = 'adaf0001-4369-7263-7569-74507974686e';
         const characteristicUUID = 'adaf0003-4369-7263-7569-74507974686e';
-
-        // Start notifications
-        return BleManager.startNotification(device.id, serviceUUID, characteristicUUID);
-      })
-      .then(() => {
-        // Add listener for notifications
-        bleManagerEmitter.addListener(
-          'BleManagerDidUpdateValueForCharacteristic',
-          ({ value, peripheral, characteristic, service }) => {
-            // Convert base64 string to byte array
-            const bytes = atob(value);
-            let binary = '';
-            for (let i = 0; i < bytes.length; i++) {
-              binary += String.fromCharCode(bytes.charCodeAt(i));
-            }
-            console.log('Received data from', peripheral, ':', binary);
-          }
-        );
-      })
-      .catch((error) => {
-        console.error(error);
+        BleManager.startNotification(device.id, serviceUUID, characteristicUUID).then(() => {
+          console.log('Notifications started');
+        }).catch((error) => {
+          console.log('Failed to start notifications:', error);
+        });
+      }).catch((error) => {
+        console.log('Failed to retrieve peripheral services:', error);
       });
+    }).catch((error) => {
+      console.log('Failed to connect to device:', error);
+    });
   };
   
 
