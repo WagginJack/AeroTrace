@@ -7,7 +7,7 @@ const { BleManagerModule } = NativeModules;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 let BLEid = ''
-var NotificationOn = false;
+const [NotificationOn, setNotificationOn] = useState(false);
 
 const Bluetooth = () => {
   const [devices, setDevices] = useState([]);
@@ -23,7 +23,6 @@ const Bluetooth = () => {
 
   useEffect(() => {
     if (NotificationOn) {
-      console.log("Notification coming in")
       // Add listener for notifications
       const subscription = bleManagerEmitter.addListener(
         'BleManagerDidUpdateValueForCharacteristic',
@@ -41,7 +40,7 @@ const Bluetooth = () => {
       // Clean up the listener on component unmount
       return () => subscription.remove();
     }
-  }, [NotificationOn]);
+  }, [NotificationOn]); // Re-run the effect when `NotificationOn` changes
 
   const startScan = () => {
     setScanning(true);
@@ -74,6 +73,7 @@ const Bluetooth = () => {
         const characteristicUUID = 'adaf0003-4369-7263-7569-74507974686e';
         BleManager.startNotification(device.id, serviceUUID, characteristicUUID).then(() => {
           console.log('Notifications started');
+          setNotificationOn(true); // This will cause a re-render
           NotificationOn = true;
         }).catch((error) => {
           console.log('Failed to start notifications:', error);
