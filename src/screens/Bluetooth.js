@@ -47,7 +47,7 @@ const Bluetooth = () => {
           const characteristicUUID = 'adaf0003-4369-7263-7569-74507974686e';
           
           BleManager.startNotification(device.id, serviceUUID, characteristicUUID)
-      .then(() => {
+        .then(() => {
         console.log('Notifications started');
         
         // Listen for notifications
@@ -65,6 +65,7 @@ const Bluetooth = () => {
       console.error('Connection error', error);
     });
   }; 
+  
   
 
   const renderItem = ({ item }) => (
