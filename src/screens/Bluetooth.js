@@ -14,6 +14,7 @@ const Bluetooth = () => {
   const [scanning, setScanning] = useState(false);
 
   const [NotificationOn, setNotificationOn] = useState(false);
+
   useEffect(() => {
     BleManager.start({ showAlert: false });
 
@@ -23,6 +24,7 @@ const Bluetooth = () => {
   }, []);
 
   useEffect(() => {
+    console.log("Inside the Notifaction On")
     if (NotificationOn) {
       // Add listener for notifications
       const subscription = bleManagerEmitter.addListener(
