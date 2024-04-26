@@ -7,12 +7,13 @@ const { BleManagerModule } = NativeModules;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 let BLEid = ''
-const [NotificationOn, setNotificationOn] = useState(false);
+
 
 const Bluetooth = () => {
   const [devices, setDevices] = useState([]);
   const [scanning, setScanning] = useState(false);
 
+  const [NotificationOn, setNotificationOn] = useState(false);
   useEffect(() => {
     BleManager.start({ showAlert: false });
 
