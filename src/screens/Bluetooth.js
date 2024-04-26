@@ -16,7 +16,7 @@ const Bluetooth = () => {
 
   const startScan = () => {
     setScanning(true);
-    BleManager.scan([], 5, true).then(() => {
+    BleManager.scan([], 2, true).then(() => {
       console.log('Scanning...');
     });
   
