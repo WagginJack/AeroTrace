@@ -16,7 +16,7 @@ const Bluetooth = () => {
 
   const startScan = () => {
     setScanning(true);
-    BleManager.scan([], 10, true).then(() => {
+    BleManager.scan([], 5, true).then(() => {
       console.log('Scanning...');
     });
   
@@ -41,48 +41,25 @@ const Bluetooth = () => {
       console.log('Connected to', device.name);
       BleManager.retrieveServices(device.id).then((peripheralInfo) => {
         console.log('Peripheral info:', peripheralInfo);
-        
-        if (peripheralInfo.services && peripheralInfo.services.length > 0) { // Check if services array exists and is not empty
+      
           // Look for the service UUID you're interested in
           const serviceUUID = 'adaf0001-4369-7263-7569-74507974686e';
           const characteristicUUID = 'adaf0003-4369-7263-7569-74507974686e';
           
-          // Find the service that matches the UUID
-          const service = peripheralInfo.services.find((s) => s.uuid === serviceUUID);
-          
-          if (service) {
-            // Check if characteristics array exists and is not empty
-            if (service.characteristics && service.characteristics.length > 0) {
-              // Find the characteristic within the service
-              const characteristic = service.characteristics.find((c) => c.characteristic === characteristicUUID);
-              
-              if (characteristic) {
-                // Enable notifications for the characteristic
-                BleManager.startNotification(device.id, serviceUUID, characteristicUUID)
-                  .then(() => {
-                    console.log('Notifications started');
-                    
-                    // Listen for notifications
-                    BleManager.onNotification(device.id, serviceUUID, characteristicUUID, (data) => {
-                      console.log('Notification:', data);
-                      // You can handle the received notification data here
-                    });
-                  })
-                  .catch((error) => {
-                    console.error('Notification error', error);
-                  });
-              } else {
-                console.error('Characteristic not found');
-              }
-            } else {
-              console.error('No characteristics found in the service');
-            }
-          } else {
-            console.error('Service not found');
-          }
-        } else {
-          console.error('No services found');
-        }
+          BleManager.startNotification(device.id, serviceUUID, characteristicUUID)
+      .then(() => {
+        console.log('Notifications started');
+        
+        // Listen for notifications
+        BleManager.onNotification(device.id, serviceUUID, characteristicUUID, (data) => {
+          console.log('Notification:', data);
+          // You can handle the received notification data here
+        });
+      })
+      .catch((error) => {
+        console.error('Notification error', error);
+      });
+
       });
     }).catch((error) => {
       console.error('Connection error', error);
