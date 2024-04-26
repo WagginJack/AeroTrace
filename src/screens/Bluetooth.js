@@ -55,9 +55,13 @@ const Bluetooth = () => {
         bleManagerEmitter.addListener(
           'BleManagerDidUpdateValueForCharacteristic',
           ({ value, peripheral, characteristic, service }) => {
-            // Convert bytes array to string
-            const data = Buffer.from(value, 'base64').toString('ascii');
-            console.log('Received data from', peripheral, ':', data);
+            // Convert base64 string to byte array
+            const bytes = atob(value);
+            let binary = '';
+            for (let i = 0; i < bytes.length; i++) {
+              binary += String.fromCharCode(bytes.charCodeAt(i));
+            }
+            console.log('Received data from', peripheral, ':', binary);
           }
         );
       })
