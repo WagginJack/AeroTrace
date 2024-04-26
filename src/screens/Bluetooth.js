@@ -35,37 +35,25 @@ const Bluetooth = () => {
     }, 10000);
   };
   
-
   const connectToDevice = (device) => {
     BleManager.connect(device.id).then(() => {
-      console.log('Connected to', device.name);
+      console.log('Connected to device:', device.name);
       BleManager.retrieveServices(device.id).then((peripheralInfo) => {
         console.log('Peripheral info:', peripheralInfo);
-      
-          // Look for the service UUID you're interested in
-          const serviceUUID = 'adaf0001-4369-7263-7569-74507974686e';
-          const characteristicUUID = 'adaf0003-4369-7263-7569-74507974686e';
-          
-          BleManager.startNotification(device.id, serviceUUID, characteristicUUID)
-        .then(() => {
-        console.log('Notifications started');
-        
-        // Listen for notifications
-        BleManager.onNotification(device.id, serviceUUID, characteristicUUID, (data) => {
-          console.log('Notification:', data);
-          // You can handle the received notification data here
+        const serviceUUID = 'adaf0001-4369-7263-7569-74507974686e';
+        const characteristicUUID = 'adaf0003-4369-7263-7569-74507974686e';
+        BleManager.startNotification(device.id, serviceUUID, characteristicUUID).then(() => {
+          console.log('Notifications started');
+        }).catch((error) => {
+          console.log('Failed to start notifications:', error);
         });
-      })
-      .catch((error) => {
-        console.error('Notification error', error);
-      });
-
+      }).catch((error) => {
+        console.log('Failed to retrieve peripheral services:', error);
       });
     }).catch((error) => {
-      console.error('Connection error', error);
+      console.log('Failed to connect to device:', error);
     });
-  }; 
-  
+  };
   
 
   const renderItem = ({ item }) => (
