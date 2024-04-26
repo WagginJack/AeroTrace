@@ -13,7 +13,7 @@ const Bluetooth = () => {
   const [devices, setDevices] = useState([]);
   const [scanning, setScanning] = useState(false);
 
-  const [NotificationOn, setNotificationOn] = useState(false);
+  const NotificationOn = (false);
 
   useEffect(() => {
     BleManager.start({ showAlert: false });
@@ -75,7 +75,6 @@ const Bluetooth = () => {
         const characteristicUUID = 'adaf0003-4369-7263-7569-74507974686e';
         BleManager.startNotification(device.id, serviceUUID, characteristicUUID).then(() => {
           console.log('Notifications started');
-          setNotificationOn(true); // This will cause a re-render
           NotificationOn = true;
         }).catch((error) => {
           console.log('Failed to start notifications:', error);
