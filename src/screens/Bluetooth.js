@@ -23,6 +23,7 @@ const Bluetooth = () => {
 
   useEffect(() => {
     if (NotificationOn) {
+      console.log("Notification On")
       // Add listener for notifications
       const subscription = bleManagerEmitter.addListener(
         'BleManagerDidUpdateValueForCharacteristic',
