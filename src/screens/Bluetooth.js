@@ -13,7 +13,7 @@ const Bluetooth = () => {
   const [devices, setDevices] = useState([]);
   const [scanning, setScanning] = useState(false);
 
-  const NotificationOn = (false);
+  var NotificationOn = (false);
 
   useEffect(() => {
     BleManager.start({ showAlert: false });
@@ -24,11 +24,13 @@ const Bluetooth = () => {
   }, []);
 
   useEffect(() => {
-    if (NotificationOn) {     console.log("Inside the Notifaction On");
+    if (NotificationOn = true) {     
+      console.log(NotificationOn);
       // Add listener for notifications
       const subscription = bleManagerEmitter.addListener(
         'BleManagerDidUpdateValueForCharacteristic',
         ({ value, peripheral, characteristic, service }) => {
+          console.log("converting to bytes")
           // Convert base64 string to byte array
           const bytes = atob(value);
           let binary = '';
