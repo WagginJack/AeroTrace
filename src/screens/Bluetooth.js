@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, FlatList, NativeEventEmitter, NativeModules  } from 'react-native';
-import BleManager from 'react-native-ble-manager';
+//import BleManager from 'react-native-ble-manager';
 
 const { BleManager } = NativeModules;
 const bleManagerEmitter = new NativeEventEmitter(BleManager);
