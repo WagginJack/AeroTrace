@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, FlatList } from 'react-native';
 import BleManager from 'react-native-ble-manager';
-import { NativeEventEmitter } from 'react-native'; //test
-const bleManagerEmitter = new NativeEventEmitter(BleManager); //test
+
+import { NativeEventEmitter, NativeModules } from 'react-native'; //test
+const { BleManagerModule } = NativeModules;
+const bleManagerEmitter = new NativeEventEmitter(BleManagerModule); //test
 
 const Bluetooth = () => {
   const [devices, setDevices] = useState([]);
