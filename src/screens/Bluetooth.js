@@ -24,7 +24,7 @@ const Bluetooth = () => {
   }, []);
 
   useEffect(() => {
-    if (NotificationOn = true) {     
+    if (NotificationOn == true) {     
       console.log(NotificationOn);
       // Add listener for notifications
       const subscription = bleManagerEmitter.addListener(
@@ -44,7 +44,7 @@ const Bluetooth = () => {
       // Clean up the listener on component unmount
       return () => subscription.remove();
     }
-  }, [NotificationOn && NotificationOn == true]); // Re-run the effect when `NotificationOn` changes to true
+  }, [NotificationOn]); // Re-run the effect when `NotificationOn` changes
 
   const startScan = () => {
     setScanning(true);
