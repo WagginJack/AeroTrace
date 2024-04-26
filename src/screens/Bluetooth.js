@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList, NativeEventEmitter, NativeModules  } from 'react-native';
-//import BleManager from 'react-native-ble-manager';
-
-const { BleManager } = NativeModules;
-const bleManagerEmitter = new NativeEventEmitter(BleManager);
+import { View, Text, Button, FlatList } from 'react-native';
+import BleManager from 'react-native-ble-manager';
 
 const Bluetooth = () => {
   const [devices, setDevices] = useState([]);
@@ -47,20 +44,6 @@ const Bluetooth = () => {
         const characteristicUUID = 'adaf0003-4369-7263-7569-74507974686e';
         BleManager.startNotification(device.id, serviceUUID, characteristicUUID).then(() => {
           console.log('Notifications started');
-  
-          // Add listener for notifications
-          const subscription = bleManagerEmitter.addListener(
-            'BleManagerDidUpdateValueForCharacteristic',
-            ({ value, peripheral, characteristic, service }) => {
-              // Convert bytes array to string
-              const data = Buffer.from(value, 'base64').toString('ascii');
-              console.log('Received data from', peripheral, ':', data);
-            }
-          );
-  
-          // Remember to remove listener when you're done
-          return () => subscription.remove();
-  
         }).catch((error) => {
           console.log('Failed to start notifications:', error);
         });
