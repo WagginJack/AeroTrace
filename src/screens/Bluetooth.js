@@ -2,8 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, FlatList } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 
+import { NativeEventEmitter, useEffect } from 'react-native';
+import BleManager from 'react-native-ble-manager';
+
+const bleManagerEmitter = new NativeEventEmitter(BleManager);
+
 let BLEid = ''
 var NotificationOn = false;
+
+useEffect(() => {
+  if (NotificationOn) {
+    // Add listener for notifications
+    const subscription = bleManagerEmitter.addListener(
+      'BleManagerDidUpdateValueForCharacteristic',
+      ({ value, peripheral, characteristic, service }) => {
+        // Convert base64 string to byte array
+        const bytes = atob(value);
+        let binary = '';
+        for (let i = 0; i < bytes.length; i++) {
+          binary += String.fromCharCode(bytes.charCodeAt(i));
+        }
+        console.log('Received data from', peripheral, ':', binary);
+      }
+    );
+
+    // Clean up the listener on component unmount
+    return () => subscription.remove();
+  }
+}, [NotificationOn]); // Re-run the effect when `NotificationOn` changes
 
 const Bluetooth = () => {
   const [devices, setDevices] = useState([]);
