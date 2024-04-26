@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, FlatList } from 'react-native';
 import BleManager from 'react-native-ble-manager';
+import { NativeEventEmitter } from 'react-native'; //test
+const bleManagerEmitter = new NativeEventEmitter(BleManager); //test
 
 const Bluetooth = () => {
   const [devices, setDevices] = useState([]);
@@ -36,23 +38,32 @@ const Bluetooth = () => {
   };
   
   const connectToDevice = (device) => {
-    BleManager.connect(device.id).then(() => {
-      console.log('Connected to device:', device.name);
-      BleManager.retrieveServices(device.id).then((peripheralInfo) => {
-        console.log('Peripheral info:', peripheralInfo);
+    BleManager.connect(device.id)
+      .then(() => {
+        return BleManager.retrieveServices(device.id);
+      })
+      .then((peripheralInfo) => {
+        // Assuming the service and characteristic UUIDs
         const serviceUUID = 'adaf0001-4369-7263-7569-74507974686e';
         const characteristicUUID = 'adaf0003-4369-7263-7569-74507974686e';
-        BleManager.startNotification(device.id, serviceUUID, characteristicUUID).then(() => {
-          console.log('Notifications started');
-        }).catch((error) => {
-          console.log('Failed to start notifications:', error);
-        });
-      }).catch((error) => {
-        console.log('Failed to retrieve peripheral services:', error);
+
+        // Start notifications
+        return BleManager.startNotification(device.id, serviceUUID, characteristicUUID);
+      })
+      .then(() => {
+        // Add listener for notifications
+        bleManagerEmitter.addListener(
+          'BleManagerDidUpdateValueForCharacteristic',
+          ({ value, peripheral, characteristic, service }) => {
+            // Convert bytes array to string
+            const data = Buffer.from(value, 'base64').toString('ascii');
+            console.log('Received data from', peripheral, ':', data);
+          }
+        );
+      })
+      .catch((error) => {
+        console.error(error);
       });
-    }).catch((error) => {
-      console.log('Failed to connect to device:', error);
-    });
   };
   
 
