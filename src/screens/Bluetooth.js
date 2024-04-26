@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, FlatList } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 
-import { NativeEventEmitter } from 'react-native';
-
-const bleManagerEmitter = new NativeEventEmitter(BleManager);
+import { NativeEventEmitter, NativeModules } from 'react-native';
+const { BleManagerModule } = NativeModules;
+const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 let BLEid = ''
 var NotificationOn = false;
@@ -40,7 +40,7 @@ const Bluetooth = () => {
       // Clean up the listener on component unmount
       return () => subscription.remove();
     }
-  }, [NotificationOn]); // Re-run the effect when `NotificationOn` changes
+  }, [NotificationOn]);
 
   const startScan = () => {
     setScanning(true);
