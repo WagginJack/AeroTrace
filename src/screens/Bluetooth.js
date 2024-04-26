@@ -27,7 +27,7 @@ const Bluetooth = () => {
       setScanning(false);
       BleManager.getDiscoveredPeripherals([]).then((results) => {
         // Filter out devices with name "UNKNOWN"
-        const filteredResults = results.filter((device) => device.name !== null);
+        const filteredResults = results.filter((device) => device.name != null);
         setDevices(filteredResults);
   
         // Log the name of each discovered device
