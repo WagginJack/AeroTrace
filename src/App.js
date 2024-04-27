@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon from 'react-native-vector-icons/AntDesign';  
+import Icon from 'react-native-vector-icons/Feather';  
 // import type { PropsWithChildren} from 'react';Push to Mac
 import {
   SafeAreaView,
@@ -22,12 +22,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 //Screens
 import HomeStack from './screens/HomeStack';
 import TrackStack from './screens/TrackStack';
-import Settings from './screens/Settings'
+import Bluetooth from './screens/Bluetooth'
 
 // export type RootStackParamList = {
 //    Home: undefined;
 //    Track: {productId: string}
-//    Settings: {productId: string}
+//    Bluetooth: {productId: string}
 // };
 
 const Tab = createBottomTabNavigator()
@@ -53,16 +53,16 @@ function App() {
             tabBarShowLabel: true,
             title: "Track",
             headerShown: false,
-            tabBarIcon: () => <Icon name="enviromento" size={25}/>,
+            tabBarIcon: () => <Icon name="map-pin" size={25}/>,
           }}
         />
         <Tab.Screen
-          name='Setting'
-          component={Settings}
+          name='Bluetooth'
+          component={Bluetooth}
           options={{
             tabBarShowLabel: true,
-            title: "Settings",
-            tabBarIcon: () => <Icon name="setting" size={25}/>,
+            title: "Bluetooth",
+            tabBarIcon: () => <Icon name="bluetooth" size={25}/>,
           }}
         />
       </Tab.Navigator>

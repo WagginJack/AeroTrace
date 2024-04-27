@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useDebugValue } from 'react';
 import { View, Text, Button, FlatList } from 'react-native';
 import BleManager from 'react-native-ble-manager';
-
+import * as RNFS from 'react-native-fs';
 import { NativeEventEmitter, NativeModules } from 'react-native';
 const { BleManagerModule } = NativeModules;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
-
-let BLEid = ''
 
 
 const Bluetooth = () => {
@@ -37,7 +35,7 @@ const Bluetooth = () => {
           // for (let i = 0; i < bytes.length; i++) {
           //   binary += String.fromCharCode(bytes.charCodeAt(i));
           // }
-          console.log(String.fromCharCode(...value));
+          console.log(String.fromCharCode(...value)); //console logging received data
         }
       );
   
@@ -68,6 +66,7 @@ const Bluetooth = () => {
   };
   
   const connectToDevice = (device) => {
+    // console.log("This is Device ID:" + device.id);
     BleManager.connect(device.id).then(() => {
       BLEid = device.id;
       console.log('Connected to device:', device.name);
@@ -93,6 +92,21 @@ const Bluetooth = () => {
   const renderItem = ({ item }) => (
     <Button
       title={`${item.name || 'Unknown'} (${item.id})`}
+      // onPress={() => {
+      //   var path = RNFS.DocumentDirectoryPath + '/currentDevice.txt'
+      //   console.log("ItemID is:" + item.id)
+      //   RNFS.writeFile(path, item.id, 'utf8')
+      //   .then(() => {
+      //     console.log('Current device saved successfully');
+      //       RNFS.readDir(RNFS.DocumentDirectoryPath + '/currentDevice.txt')
+      //       .then((result) => {
+      //         console.log('File Reads: ', result);
+      //       })
+      //     })
+      //   .catch((err) => {
+      //     console.log('Failed to save current device:', err);
+      //   });
+      // }}
       onPress={() => connectToDevice(item)}
     />
   );

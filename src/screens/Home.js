@@ -10,12 +10,12 @@ const Home = ({navigation}) => {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>Home screen</Text>
-
+{/* 
           <ImageButton 
         onPress={() => navigation.navigate('Bluetooth')} 
         imageStyle={styles.image} 
         source={require("../../assets/icon.png")}
-      />
+      /> */}
         </View>
       );
 }
