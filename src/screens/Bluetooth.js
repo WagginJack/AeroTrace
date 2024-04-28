@@ -8,10 +8,6 @@ import { NativeEventEmitter, NativeModules } from 'react-native';
 const { BleManagerModule } = NativeModules;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
-//theis is for storing files
-// import Storage from 'react-native-storage';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-
 const Bluetooth = () => {
   const [devices, setDevices] = useState([]);
   const [scanning, setScanning] = useState(false);
@@ -26,28 +22,28 @@ const Bluetooth = () => {
     };
   }, []);
 
-  useEffect(() => {
-    // if (NotificationOn == true) {     
-      //console.log("NotificationOn status: " + NotificationOn);
-      // Add listener for notifications
-      const subscription = bleManagerEmitter.addListener(
-        'BleManagerDidUpdateValueForCharacteristic',
-        ({ value, peripheral, characteristic, service }) => {
-          //console.log("converting to bytes");
-          // Convert base64 string to byte array
-          //let asciiText = String.fromCharCode(...value);
-          // let binary = '';
-          // for (let i = 0; i < bytes.length; i++) {
-          //   binary += String.fromCharCode(bytes.charCodeAt(i));
-          // }
-          console.log(String.fromCharCode(...value)); //console logging received data
-        }
-      );
+  // useEffect(() => {
+  //   // if (NotificationOn == true) {     
+  //     //console.log("NotificationOn status: " + NotificationOn);
+  //     // Add listener for notifications
+  //     const subscription = bleManagerEmitter.addListener(
+  //       'BleManagerDidUpdateValueForCharacteristic',
+  //       ({ value, peripheral, characteristic, service }) => {
+  //         //console.log("converting to bytes");
+  //         // Convert base64 string to byte array
+  //         //let asciiText = String.fromCharCode(...value);
+  //         // let binary = '';
+  //         // for (let i = 0; i < bytes.length; i++) {
+  //         //   binary += String.fromCharCode(bytes.charCodeAt(i));
+  //         // }
+  //         console.log(String.fromCharCode(...value)); //console logging received data
+  //       }
+  //     );
   
-      // Clean up the listener on component unmount
-      return () => subscription.remove();
-    //}
-  }, []); // Re-run the effect when `NotificationOn` changes
+  //     // Clean up the listener on component unmount
+  //     return () => subscription.remove();
+  //   //}
+  // }, []); // Re-run the effect when `NotificationOn` changes
 
   const startScan = () => {
     setScanning(true);
@@ -101,7 +97,7 @@ const path = RNFS.DocumentDirectoryPath + '/BLEID.txt';
       title={`${item.name || 'Unknown'} (${item.id})`}
       onPress={() => {
         console.log("Path is - "+path)
-        RNFS.writeFile(path, item.id, 'utf8')
+        RNFS.writeFile(path, item.name, 'utf8')
           .then(() => {
             console.log('Current device saved successfully');
           })

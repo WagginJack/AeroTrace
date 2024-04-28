@@ -1,68 +1,101 @@
-import { ImageBackground, Button, StyleSheet, Text, useEffect, View } from 'react-native'
-import React from 'react'
+import { ImageBackground, Button, StyleSheet, Text, View} from 'react-native'
+import React, { useState, useEffect, useDebugValue } from 'react';
 import ImageButton from '../../components/ImageButton';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
+// These are for BLE listener events
+import BleManager from 'react-native-ble-manager';
 import { NativeEventEmitter, NativeModules } from 'react-native';
 const { BleManagerModule } = NativeModules;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const Track = ({ navigation }) => {
 
-    // useEffect(() => {
-    //     BleManager.start({ showAlert: false });
-    
-    //     return () => {
-    //       BleManager.stopScan();
-    //     };
-    //   }, []);
-    useEffect(() => {
-        connectToDevice();
-        return 0;
-      }, []);
+    const RNFS = require('react-native-fs');
+    const path = RNFS.DocumentDirectoryPath + '/BLEID.txt';
 
-    useEffect(() => {
-        // if (NotificationOn == true) {     
-          //console.log("NotificationOn status: " + NotificationOn);
-          // Add listener for notifications
-          const subscription = bleManagerEmitter.addListener(
-            'BleManagerDidUpdateValueForCharacteristic',
-            ({ value, peripheral, characteristic, service }) => {
-              //console.log("converting to bytes");
-              // Convert base64 string to byte array
-              //let asciiText = String.fromCharCode(...value);
-              // let binary = '';
-              // for (let i = 0; i < bytes.length; i++) {
-              //   binary += String.fromCharCode(bytes.charCodeAt(i));
-              // }
-              console.log(String.fromCharCode(...value)); //console logging received data
-            }
-          );
-      
-          // Clean up the listener on component unmount
-          return () => subscription.remove();
-        //}
-      }, []); // Re-run the effect when `NotificationOn` changes
-  
-      const RNFS = require('react-native-fs');
-      const path = RNFS.DocumentDirectoryPath + '/BLEID.txt';
+    let BLEname = "";
 
-      const BLEid = "";
-    const connectToDevice = () => {
-        RNFS.readFile(path, 'utf8')
+    RNFS.readFile(path, 'utf8')
         .then((content) => {
-          console.log('BLEID is:', content);
+          console.log('BLEname is:', content);
           if (content != ""){
-            BLEid = content;
+            BLEname = content;
           }
           else{
-                console.log('BLEID is empty');
+                console.log('BLEname is empty');
           }
         })
         .catch((err) => {
           console.log('Failed to read file:', err);
         });
-        BleManager.connect(BLEid).then(() => {
+
+    useEffect(() => {
+        startScan();
+      }, []); //
+
+      const [devices, setDevices] = useState([]);
+      const [scanning, setScanning] = useState(false);
+    
+      //const [NotificationOn, setNotificationOn] = useState(false);
+      
+      useEffect(() => {
+        BleManager.start({ showAlert: false });
+    
+        return () => {
+          BleManager.stopScan();
+        };
+      }, []);
+
+    useEffect(() => {
+          const subscription = bleManagerEmitter.addListener(
+            'BleManagerDidUpdateValueForCharacteristic',
+            ({ value, peripheral, characteristic, service }) => {
+              console.log(String.fromCharCode(...value)); //console logging received data
+            }
+          );
+          // Clean up the listener on component unmount
+          return () => subscription.remove();
+      }, []); // Re-run the effect when `NotificationOn` changes
+
+const startScan = () => {
+    setScanning(true);
+    BleManager.scan([], 2, true).then(() => {
+      console.log('Scanning...');
+    });
+  
+    setTimeout(() => {
+      setScanning(false);
+      BleManager.getDiscoveredPeripherals([]).then((results) => {
+        // Filter out devices with name "UNKNOWN"
+        
+        console.log('Discovered devices:', results.map(device => device.name));
+
+
+
+        const filteredResults = results.filter((device) => device.name != null );
+        setDevices(filteredResults);
+
+        console.log("filteredResults: ", filteredResults);
+  
+        // // Log the name of each discovered device
+        // filteredResults.forEach((device) => {
+        //   console.log("Connecting to ... " + device);
+        // });
+    filteredResults.forEach((device) => {
+        if (device.name === BLEname) {
+            console.log("Made it here!")
+            connectToDevice(device);
+        }
+    });
+    
+    });
+    }, 10000);
+  };
+
+
+const connectToDevice = (device) => {
+        BleManager.connect(device.id).then(() => {
           console.log('Connected to device:', device.name);
           BleManager.retrieveServices(device.id).then((peripheralInfo) => {
             console.log('Peripheral info:', peripheralInfo);
