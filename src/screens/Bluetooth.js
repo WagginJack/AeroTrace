@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useDebugValue } from 'react';
 import { View, Text, Button, FlatList } from 'react-native';
 import BleManager from 'react-native-ble-manager';
-import * as RNFS from 'react-native-fs';
+
+
+// These are for BLE listener events
 import { NativeEventEmitter, NativeModules } from 'react-native';
 const { BleManagerModule } = NativeModules;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
+//theis is for storing files
+// import Storage from 'react-native-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Bluetooth = () => {
   const [devices, setDevices] = useState([]);
@@ -88,26 +93,31 @@ const Bluetooth = () => {
     });
   };
   
+const RNFS = require('react-native-fs');
+const path = RNFS.DocumentDirectoryPath + '/BLEID.txt';
 
   const renderItem = ({ item }) => (
     <Button
       title={`${item.name || 'Unknown'} (${item.id})`}
-      // onPress={() => {
-      //   var path = RNFS.DocumentDirectoryPath + '/currentDevice.txt'
-      //   console.log("ItemID is:" + item.id)
-      //   RNFS.writeFile(path, item.id, 'utf8')
-      //   .then(() => {
-      //     console.log('Current device saved successfully');
-      //       RNFS.readDir(RNFS.DocumentDirectoryPath + '/currentDevice.txt')
-      //       .then((result) => {
-      //         console.log('File Reads: ', result);
-      //       })
-      //     })
-      //   .catch((err) => {
-      //     console.log('Failed to save current device:', err);
-      //   });
-      // }}
-      onPress={() => connectToDevice(item)}
+      onPress={() => {
+        console.log("Path is - "+path)
+        RNFS.writeFile(path, item.id, 'utf8')
+          .then(() => {
+            console.log('Current device saved successfully');
+          })
+          .catch((err) => {
+            console.log('Failed to save current device:', err);
+          });
+          // RNFS.readFile(path, 'utf8')
+          //   .then((content) => {
+          //     console.log('File content:', content);
+          //   })
+          //   .catch((err) => {
+          //     console.log('Failed to read file:', err);
+          //   });
+        
+      }}
+      // onPress={() => connectToDevice(item)}
     />
   );
 
@@ -119,6 +129,7 @@ const Bluetooth = () => {
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
+      {/* <Button onPress={this._retrieveData} title='IdentifyID'/> */}
     </View>
   );
 };

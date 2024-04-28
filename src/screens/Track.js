@@ -7,31 +7,6 @@ import { NativeEventEmitter, NativeModules } from 'react-native';
 const { BleManagerModule } = NativeModules;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
-// const connectToDevice = (device) => {
-//     console.log("This is Device ID:" + device.id);
-//     BleManager.connect(device.id).then(() => {
-//       BLEid = device.id;
-//       console.log('Connected to device:', device.name);
-//       BleManager.retrieveServices(device.id).then((peripheralInfo) => {
-//         console.log('Peripheral info:', peripheralInfo);
-//         const serviceUUID = 'adaf0001-4369-7263-7569-74507974686e';
-//         const characteristicUUID = 'adaf0003-4369-7263-7569-74507974686e';
-//         BleManager.startNotification(device.id, serviceUUID, characteristicUUID).then(() => {
-//           console.log('Notifications started');
-//           //setNotificationOn(true); // This will cause a re-render
-//         }).catch((error) => {
-//           console.log('Failed to start notifications:', error);
-//         });
-//       }).catch((error) => {
-//         console.log('Failed to retrieve peripheral services:', error);
-//       });
-//     }).catch((error) => {
-//       console.log('Failed to connect to device:', error);
-//     });
-//   };
-
-
-
 const Track = ({ navigation }) => {
 
     // useEffect(() => {
@@ -41,29 +16,71 @@ const Track = ({ navigation }) => {
     //       BleManager.stopScan();
     //     };
     //   }, []);
+    useEffect(() => {
+        connectToDevice();
+        return 0;
+      }, []);
 
-    // useEffect(() => {
-    //     // if (NotificationOn == true) {     
-    //       //console.log("NotificationOn status: " + NotificationOn);
-    //       // Add listener for notifications
-    //       const subscription = bleManagerEmitter.addListener(
-    //         'BleManagerDidUpdateValueForCharacteristic',
-    //         ({ value, peripheral, characteristic, service }) => {
-    //           //console.log("converting to bytes");
-    //           // Convert base64 string to byte array
-    //           //let asciiText = String.fromCharCode(...value);
-    //           // let binary = '';
-    //           // for (let i = 0; i < bytes.length; i++) {
-    //           //   binary += String.fromCharCode(bytes.charCodeAt(i));
-    //           // }
-    //           console.log(String.fromCharCode(...value)); //console logging received data
-    //         }
-    //       );
+    useEffect(() => {
+        // if (NotificationOn == true) {     
+          //console.log("NotificationOn status: " + NotificationOn);
+          // Add listener for notifications
+          const subscription = bleManagerEmitter.addListener(
+            'BleManagerDidUpdateValueForCharacteristic',
+            ({ value, peripheral, characteristic, service }) => {
+              //console.log("converting to bytes");
+              // Convert base64 string to byte array
+              //let asciiText = String.fromCharCode(...value);
+              // let binary = '';
+              // for (let i = 0; i < bytes.length; i++) {
+              //   binary += String.fromCharCode(bytes.charCodeAt(i));
+              // }
+              console.log(String.fromCharCode(...value)); //console logging received data
+            }
+          );
       
-    //       // Clean up the listener on component unmount
-    //       return () => subscription.remove();
-    //     //}
-    //   }, []); // Re-run the effect when `NotificationOn` changes
+          // Clean up the listener on component unmount
+          return () => subscription.remove();
+        //}
+      }, []); // Re-run the effect when `NotificationOn` changes
+  
+      const RNFS = require('react-native-fs');
+      const path = RNFS.DocumentDirectoryPath + '/BLEID.txt';
+
+      const BLEid = "";
+    const connectToDevice = () => {
+        RNFS.readFile(path, 'utf8')
+        .then((content) => {
+          console.log('BLEID is:', content);
+          if (content != ""){
+            BLEid = content;
+          }
+          else{
+                console.log('BLEID is empty');
+          }
+        })
+        .catch((err) => {
+          console.log('Failed to read file:', err);
+        });
+        BleManager.connect(BLEid).then(() => {
+          console.log('Connected to device:', device.name);
+          BleManager.retrieveServices(device.id).then((peripheralInfo) => {
+            console.log('Peripheral info:', peripheralInfo);
+            const serviceUUID = 'adaf0001-4369-7263-7569-74507974686e';
+            const characteristicUUID = 'adaf0003-4369-7263-7569-74507974686e';
+            BleManager.startNotification(device.id, serviceUUID, characteristicUUID).then(() => {
+              console.log('Notifications started');
+              //setNotificationOn(true); // This will cause a re-render
+            }).catch((error) => {
+              console.log('Failed to start notifications:', error);
+            });
+          }).catch((error) => {
+            console.log('Failed to retrieve peripheral services:', error);
+          });
+        }).catch((error) => {
+          console.log('Failed to connect to device:', error);
+        });
+      };
 
 
 
