@@ -65,29 +65,31 @@ const Bluetooth = () => {
       });
     }, 10000);
   };
+
+  // NOT Ever used
   
-  const connectToDevice = (device) => {
-    // console.log("This is Device ID:" + device.id);
-    BleManager.connect(device.id).then(() => {
-      BLEid = device.id;
-      console.log('Connected to device:', device.name);
-      BleManager.retrieveServices(device.id).then((peripheralInfo) => {
-        console.log('Peripheral info:', peripheralInfo);
-        const serviceUUID = 'adaf0001-4369-7263-7569-74507974686e';
-        const characteristicUUID = 'adaf0003-4369-7263-7569-74507974686e';
-        BleManager.startNotification(device.id, serviceUUID, characteristicUUID).then(() => {
-          console.log('Notifications started');
-          //setNotificationOn(true); // This will cause a re-render
-        }).catch((error) => {
-          console.log('Failed to start notifications:', error);
-        });
-      }).catch((error) => {
-        console.log('Failed to retrieve peripheral services:', error);
-      });
-    }).catch((error) => {
-      console.log('Failed to connect to device:', error);
-    });
-  };
+  // const connectToDevice = (device) => {
+  //   // console.log("This is Device ID:" + device.id);
+  //   BleManager.connect(device.id).then(() => {
+  //     BLEid = device.id;
+  //     console.log('Connected to device:', device.name);
+  //     BleManager.retrieveServices(device.id).then((peripheralInfo) => {
+  //       console.log('Peripheral info:', peripheralInfo);
+  //       const serviceUUID = 'adaf0001-4369-7263-7569-74507974686e';
+  //       const characteristicUUID = 'adaf0003-4369-7263-7569-74507974686e';
+  //       BleManager.startNotification(device.id, serviceUUID, characteristicUUID).then(() => {
+  //         console.log('Notifications started');
+  //         //setNotificationOn(true); // This will cause a re-render
+  //       }).catch((error) => {
+  //         console.log('Failed to start notifications:', error);
+  //       });
+  //     }).catch((error) => {
+  //       console.log('Failed to retrieve peripheral services:', error);
+  //     });
+  //   }).catch((error) => {
+  //     console.log('Failed to connect to device:', error);
+  //   });
+  // };
   
 const RNFS = require('react-native-fs');
 const path = RNFS.DocumentDirectoryPath + '/BLEID.txt';
