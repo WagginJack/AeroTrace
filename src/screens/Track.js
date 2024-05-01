@@ -22,6 +22,8 @@ let maxSpeed_longitude = 0;
 let maxSpeed_altitude = 0;
 let maxSpeed_angle = 0;
 
+let maxBLEnameOutput = 0;
+
 const Track = ({ navigation }) => {
 
 
@@ -34,11 +36,18 @@ const Track = ({ navigation }) => {
 
     RNFS.readFile(path, 'utf8')
         .then((content) => {
-            console.log('BLEname is:', content);
-            if (content != "") {
-                BLEname = content;
+            if(maxBLEnameOutput == 0 && content != ""){
+                console.log('BLEname is:', content);
+                if (content != "") {
+                    BLEname = content;
+                    maxBLEnameOutput = 1;
+                }
             }
-            else {
+            else if (maxBLEnameOutput == 1 && content != ""){
+                BLEname = content;
+                maxBLEnameOutput = 1;
+            }
+            else if (content == ""){
                 console.log('BLEname is empty');
             }
         })
@@ -137,8 +146,6 @@ const Track = ({ navigation }) => {
                 // Filter out devices with name "UNKNOWN"
 
                 console.log('Discovered devices:', results.map(device => device.name));
-
-
 
                 const filteredResults = results.filter((device) => device.name != null);
                 setDevices(filteredResults);
@@ -259,13 +266,22 @@ const Track = ({ navigation }) => {
 
             <Button
                 color="#71dc71"
-                title="reset"
+                title="Reset"
 
                 onPress={() => {
                     console.log("Reset Button Pressed");
                     console.log("Latitude Length", latitude.length);
                     maxSpeed = 0;
                     console.log("Max Speed: ", maxSpeed);
+                }}
+            />
+            <Button
+                color="#0082FC"
+                title="Reconnect"
+
+                onPress={() => {
+                    console.log("Reconnecting to: ", BLEname);
+                    startScan();
                 }}
             />
         </View>
