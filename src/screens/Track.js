@@ -21,6 +21,12 @@ let maxSpeed_latitude = 0;
 let maxSpeed_longitude = 0;
 let maxSpeed_altitude = 0;
 let maxSpeed_angle = 0;
+//globalvariables for current variables
+const [currentLatitude, setCurrentLatitude] = useState(0);
+const [currentLongitude, setCurrentLongitude] = useState(0);    
+const [currentAltitude, setCurrentAltitude] = useState(0);  
+const [currentSpeed, setCurrentSpeed] = useState(0);
+const [currentAngle, setCurrentAngle] = useState(0);
 
 let maxBLEnameOutput = 0;
 
@@ -114,6 +120,7 @@ const Track = ({ navigation }) => {
                 else if (incomingNotification.includes("SP:") && shiftFlag == false) {
                     incomingNotification = incomingNotification.substring(3);
                     incomingNotification = parseFloat(incomingNotification);
+                    setCurrentSpeed(incomingNotification);
                     if (maxSpeed < incomingNotification) {
                         maxSpeed = incomingNotification;
                     }
@@ -256,9 +263,9 @@ const Track = ({ navigation }) => {
 
                 </MapView>
             </View>
-            <Text>Speed: {speed[0]} mph</Text>
-            <Text>Heading: _____ °X</Text>
-            <Text>Altitude: {altitude[0]} ft</Text>
+            <Text>Speed: {currentSpeed} mph</Text>
+            <Text>Heading: {currentAngle} °X</Text>
+            <Text>Altitude: {currentAltitude} ft</Text>
             <Text>Distance: _____ ft</Text>
 
             {/* Incoming Bluetooth Notification */}
