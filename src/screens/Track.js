@@ -275,7 +275,7 @@ const Track = ({ navigation }) => {
                     console.log("Max Speed: ", maxSpeed);
                 }}
             />
-            <Button
+            <Button 
                 color="#0082FC"
                 title="Reconnect"
 
