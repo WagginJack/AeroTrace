@@ -22,15 +22,16 @@ let maxSpeed_longitude = 0;
 let maxSpeed_altitude = 0;
 let maxSpeed_angle = 0;
 //globalvariables for current variables
-const [currentLatitude, setCurrentLatitude] = useState(0);
-const [currentLongitude, setCurrentLongitude] = useState(0);    
-const [currentAltitude, setCurrentAltitude] = useState(0);  
-const [currentSpeed, setCurrentSpeed] = useState(0);
-const [currentAngle, setCurrentAngle] = useState(0);
 
 let maxBLEnameOutput = 0;
 
 const Track = ({ navigation }) => {
+
+    const [currentLatitude, setCurrentLatitude] = useState(0);
+    const [currentLongitude, setCurrentLongitude] = useState(0);    
+    const [currentAltitude, setCurrentAltitude] = useState(0);  
+    const [currentSpeed, setCurrentSpeed] = useState(0);
+    const [currentAngle, setCurrentAngle] = useState(0);
 
 
     let incomingNotification = "";
