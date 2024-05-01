@@ -276,16 +276,16 @@ const Track = ({ navigation }) => {
                 }}
             />
             
-            <Button 
-                style={{ padding: '5%' }}
+            <View style={{ padding: '5%' }}>
+                <Button 
                 color="#0082FC"
                 title="Reconnect"
-
                 onPress={() => {
                     console.log("Reconnecting to: ", BLEname);
                     startScan();
                 }}
-            />
+                />
+            </View>
         </View>
     );
 }
