@@ -9,21 +9,20 @@ import { NativeEventEmitter, NativeModules } from 'react-native';
 const { BleManagerModule } = NativeModules;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
+let shiftFlag = false;
+let latitude = [];
+let longitude = [];
+let altitude = [];
+let speed = [];
+let angle = [];
+//global variables keeping track of highest speed
+let maxSpeed = 0;
+let maxSpeed_latitude = 0;
+let maxSpeed_longitude = 0;
+let maxSpeed_altitude = 0;
+let maxSpeed_angle = 0;
+
 const Track = ({ navigation }) => {
-
-    let shiftFlag = false;
-    let latitude = [];
-    let longitude = [];
-    let altitude = [];
-    let speed = [];
-    let angle = [];
-
-    //global variables keeping track of highest speed
-    let maxSpeed = 0;
-    let maxSpeed_latitude = 0;
-    let maxSpeed_longitude = 0;
-    let maxSpeed_altitude = 0;
-    let maxSpeed_angle = 0;
 
 
     let incomingNotification = "";
@@ -106,8 +105,7 @@ const Track = ({ navigation }) => {
                 else if (incomingNotification.includes("SP:") && shiftFlag == false) {
                     incomingNotification = incomingNotification.substring(3);
                     incomingNotification = parseFloat(incomingNotification);
-                    if(maxSpeed < incomingNotification)
-                    {
+                    if (maxSpeed < incomingNotification) {
                         maxSpeed = incomingNotification;
                     }
                     speed.push(incomingNotification);
@@ -212,7 +210,14 @@ const Track = ({ navigation }) => {
                         //Map the most recent location of the device
                         coordinate={{ latitude: 38.957748413, longitude: -95.252746582 }}
                     />
-                    {
+                    {/* d.segments.map((c) => (
+                    <Polyline
+                        coordinates={c.coordinates.map(c => ({ latitude: c[0], longitude: c[1] }))}
+                        strokeColor="#000"
+                        strokeWidth={6}>
+                    </Polyline>
+                    )) */}
+                    {/* {
                         speed.map((d) =>
                             d.segments.map((c) => (
                                 <Polyline
@@ -226,7 +231,7 @@ const Track = ({ navigation }) => {
                                         description="This is where the magic happens!"></Marker>
                                 </Polyline>
                             )),
-                        )}
+                        )} */}
                     {/* 
                     <Polyline
                         //Map the path of the device in the last ~10 seconds
@@ -258,6 +263,7 @@ const Track = ({ navigation }) => {
 
                 onPress={() => {
                     console.log("Reset Button Pressed");
+                    console.log("Latitude Length", latitude.length);
                     maxSpeed = 0;
                     console.log("Max Speed: ", maxSpeed);
                 }}
