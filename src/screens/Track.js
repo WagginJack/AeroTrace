@@ -12,7 +12,7 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 let shiftFlag = false;
 let latitude = [];
 let longitude = [];
-let latlong = [];
+let coordinates = [];
 let altitude = [];
 let speed = [];
 let angle = [];
@@ -30,10 +30,10 @@ const Track = ({ navigation }) => {
 
     const [currentLatitude, setCurrentLatitude] = useState(0);
     const [currentLongitude, setCurrentLongitude] = useState(0);
-    const [currentAltitude, setCurrentAltitude] = useState(0);
+    const [currentAltitude, setCurrentAltitude] = useState(null);
     const [currentSpeed, setCurrentSpeed] = useState(0);
     const [currentAngle, setCurrentAngle] = useState(0);
-
+    const [currentCoordinate, setCurrentCoordinate] = useState({ latitude: 0, longitude: 0 });
 
     let incomingNotification = "";
 
@@ -104,7 +104,8 @@ const Track = ({ navigation }) => {
                     if ((longitude.length != 0) && (latitude.length != 1)) {
                         if (Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]) > 0.0001) {
                             longitude.unshift(incomingNotification);
-                            latlong.unshift({ latitude: latitude[0], longitude: longitude[0] });
+                            coordinates.unshift({ latitude: latitude[0], longitude: longitude[0] });
+                            setCurrentCoordinate(coordinates[0]);
                             setCurrentLongitude(incomingNotification);
                             console.log("Longitude: ", incomingNotification);
                         }
@@ -232,18 +233,13 @@ const Track = ({ navigation }) => {
                         coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
                     />
 
-                    {/* this.state.polylines.map(polyline => {
-                        console.log(polyline.latlngObj)
-                        return (
-                            <MapView.Polyline
-                                key={polyline.key}
-                                coordinates={polyline.latlngObj}
-                                strokeColor={PolylineBlue}
-                                strokeWidth={5}
-                            />
-                        )
-                    }
-                    ) */}
+
+                    <MapView.Polyline
+                        coordinates={currentCoordinate}
+                        strokeColor={PolylineBlue}
+                        strokeWidth={5}
+                    />
+
 
                     {/* d.segments.map((c) => (
                     <Polyline
@@ -301,11 +297,11 @@ const Track = ({ navigation }) => {
                     console.log("Latitude Length", latitude.length);
                     maxSpeed = 0;
                     console.log("Max Speed: ", maxSpeed);
-                    currentAltitude = null;
-                    currentAngle = 0;
-                    currentLatitude = 0;
-                    currentLongitude = 0;
-                    currentSpeed = 0;
+                    setCurrentAltitude(null);
+                    setCurrentLatitude(0);
+                    setCurrentLongitude(0);
+                    setCurrentSpeed(0);
+                    setCurrentAngle(0);
                 }}
             />
 
