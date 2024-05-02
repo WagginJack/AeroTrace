@@ -13,7 +13,7 @@ let count = 0;
 let shiftFlag = false;
 let latitude = [];
 let longitude = [];
-let coordinates = [];
+//let coordinates = [];
 let altitude = [];
 let speed = [];
 let angle = [];
@@ -35,14 +35,14 @@ const Track = ({ navigation }) => {
     const [currentAltitude, setCurrentAltitude] = useState(null);
     const [currentSpeed, setCurrentSpeed] = useState(0);
     const [currentAngle, setCurrentAngle] = useState(0);
-    const [coordinates, setCoordinates] = useState([{ latitude: 0, longitude: 0 },]);
+    const [coordinates, setCoordinates] = useState([{latitude: 0, longitude: 0}, {latitude: 50, longitude: 50},]);
 
     function updateCoordinates() {
         const nextCoordinates = [
             // New item:
-            { latitude: currentLatitude, longitude: currentLongitude },
+            {latitude: currentLatitude, longitude: currentLongitude},
             // Items after the insertion point:
-            ...coordinates.slice(0, 60)
+            ...coordinates.slice(0, 59)
         ];
         setCoordinates(nextCoordinates);
     }
@@ -108,27 +108,30 @@ const Track = ({ navigation }) => {
                     tempLat = incomingNotification;
                     //setCurrentLatitude(incomingNotification);
                     console.log("Latitude: ", incomingNotification);
-
                 }
                 else if (incomingNotification.includes("LO:")) {
-                    console.log(incomingNotification);
+                    //console.log(incomingNotification);
                     incomingNotification = incomingNotification.substring(5);
-                    console.log("before ParseFloat: " + incomingNotification);
+                    //console.log("before ParseFloat: " + incomingNotification);
                     incomingNotification = parseFloat(incomingNotification);
+
                     //setCurrentLongitude(incomingNotification);
                     //console.log(Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]));
                     console.log("Longitude: ", incomingNotification);
-                    longitude.unshift(incomingNotification);
-
-                    if (count > 0) {
+                    //longitude.unshift(incomingNotification);
+                    if (((typeof incomingNotification) != "number") || ((typeof tempLat) != "number")){
+                        console.log("invalid lat/long");
+                    }
+                    else if (count > 0) {
                         console.log(Math.abs(incomingNotification - currentLongitude) + Math.abs(tempLat - currentLatitude));
                         if ((Math.abs(incomingNotification - currentLongitude) + Math.abs(tempLat - currentLatitude)) > 0.000000001) {
-                            latitude.unshift(tempLat);
-                            longitude.unshift(incomingNotification);
-                            coordinates.unshift({ latitude: latitude[0], longitude: longitude[0] });
-                            setCurrentCoordinate(coordinates[0]);
+                            //latitude.unshift(tempLat);
+                            //longitude.unshift(incomingNotification);
+                            //coordinates.unshift({ latitude: latitude[0], longitude: longitude[0] });
+                            //setCurrentCoordinate(coordinates[0]);
                             setCurrentLongitude(incomingNotification);
                             setCurrentLatitude(tempLat);
+                            updateCoordinates();
                             console.log("Longitude: ", incomingNotification);
                             count++;
                         }
@@ -138,6 +141,7 @@ const Track = ({ navigation }) => {
                         longitude.unshift(incomingNotification);
                         setCurrentLatitude(tempLat);
                         setCurrentLongitude(incomingNotification);
+                        updateCoordinates();
                     }
                 }
 
@@ -261,11 +265,11 @@ const Track = ({ navigation }) => {
                     />
 
 
-                    {/* <MapView.Polyline
-                        coordinates={"Latitude: 0, Longitude: 0"}
+                    <Polyline
+                        coordinates={coordinates}
                         strokeColor={"#000000"}
                         strokeWidth={5}
-                    /> */}
+                    />
 
                     {/* <Polyline
                         coordinates={currentCoordinate}
@@ -330,6 +334,7 @@ const Track = ({ navigation }) => {
 
                 onPress={() => {
                     console.log("Reset Button Pressed");
+                    console.log(coordinates);
                     console.log("Latitude Length", latitude.length);
                     maxSpeed = 0;
                     console.log("Max Speed: ", maxSpeed);
