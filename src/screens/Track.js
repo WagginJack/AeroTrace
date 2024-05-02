@@ -38,12 +38,14 @@ const Track = ({ navigation }) => {
     const [coordinates, setCoordinates] = useState([{latitude: 0, longitude: 0}, {latitude: 50, longitude: 50},]);
 
     function updateCoordinates() {
+        console.log("Adding Lat: " + currentLatitude + " and Long: " + currentLongitude);
         const nextCoordinates = [
             // New item:
             {latitude: currentLatitude, longitude: currentLongitude},
             // Items after the insertion point:
             ...coordinates.slice(0, 59)
         ];
+        console.log(nextCoordinates)
         setCoordinates(nextCoordinates);
     }
 
@@ -144,6 +146,7 @@ const Track = ({ navigation }) => {
                         setCurrentLatitude(tempLat);
                         setCurrentLongitude(incomingNotification);
                         updateCoordinates();
+                        count++;    
                     }
                 }
 
