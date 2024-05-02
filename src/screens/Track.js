@@ -350,7 +350,7 @@ const Track = ({ navigation }) => {
                 </MapView>
             </View>
             <Text>Speed: {currentSpeed} mph</Text>
-            <Text>Heading: {currentAngle} °X</Text>
+            <Text>Heading: {currentAngle} °</Text>
             <Text>Altitude: {currentAltitude} ft</Text>
             <Text>Latitude: {currentLatitude} °</Text>
             <Text>Longitude: {currentLongitude} °</Text>
