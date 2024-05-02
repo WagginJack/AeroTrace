@@ -111,7 +111,8 @@ const Track = ({ navigation }) => {
                 }
                 else if (incomingNotification.includes("LO:")) {
                     //console.log(incomingNotification);
-                    incomingNotification = incomingNotification.substring(5);
+                    //incomingNotification = incomingNotification.substring(5);
+                    incomingNotification = incomingNotification.replace("LO:", "");
                     //console.log("before ParseFloat: " + incomingNotification);
                     incomingNotification = parseFloat(incomingNotification);
 
@@ -119,7 +120,8 @@ const Track = ({ navigation }) => {
                     //console.log(Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]));
                     console.log("Longitude: ", incomingNotification);
                     //longitude.unshift(incomingNotification);
-                    if (((typeof incomingNotification) != "number") || ((typeof tempLat) != "number")){
+                    //if (((typeof incomingNotification) != "number") || ((typeof tempLat) != "number")){
+                    if (!Number.isFinite(incomingNotification) || !Number.isFinite(tempLat)) {
                         console.log("invalid lat/long");
                     }
                     else if (count > 0) {
