@@ -34,6 +34,8 @@ let firstCoordinate = 0;
 
 let resetCoordinates = 0;
 
+let theDevice;
+
 const Track = ({ navigation }) => {
 
     const [currentLatitude, setCurrentLatitude] = useState(0);
@@ -245,6 +247,7 @@ const Track = ({ navigation }) => {
                 // });
                 filteredResults.forEach((device) => {
                     if (device.name === BLEname) {
+                        theDevice = device;
                         connectToDevice(device);
                     }
                 });
@@ -394,7 +397,7 @@ const Track = ({ navigation }) => {
                     title="Reconnect"
                     onPress={() => {
                         console.log("Reconnecting to: ", BLEname);
-                        startScan();
+                        connectToDevice(theDevice);
                     }}
                 />
             </View>
