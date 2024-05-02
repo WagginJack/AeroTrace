@@ -86,14 +86,14 @@ const Track = ({ navigation }) => {
                 //console.log(String.fromCharCode(...value)); //console logging received data
                 incomingNotification = (String.fromCharCode(...value));
                 if (incomingNotification.includes("Waiting")) {
-                    console.log("incomingNotification: ", incomingNotification);
+                    console.log(incomingNotification);
                 }
                 else if (incomingNotification.includes("LA:")) {
                     shiftFlag = false;
                     incomingNotification = incomingNotification.substring(3);
                     incomingNotification = parseFloat(incomingNotification);
                     latitude.push(incomingNotification);
-                    console.log("incomingNotification: ", incomingNotification);
+                    console.log("Latitude: ", incomingNotification);
 
                 }
                 else if (incomingNotification.includes("LO:")) {
@@ -102,7 +102,7 @@ const Track = ({ navigation }) => {
                     if ((longitude.length != 0) && (latitude.length != 1)) {
                         if (Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]) > 0.0001) {
                             longitude.push(incomingNotification);
-                            console.log("incomingNotification: ", incomingNotification);
+                            console.log("Longitude: ", incomingNotification);
                         }
                         else {
                             latitude.shift();
@@ -116,7 +116,7 @@ const Track = ({ navigation }) => {
                     incomingNotification = parseFloat(incomingNotification);
                     setCurrentAltitude(incomingNotification);
                     altitude.push(incomingNotification);
-                    console.log("incomingNotification: ", incomingNotification);
+                    console.log("Altitude: ", incomingNotification);
 
                 }
                 else if (incomingNotification.includes("SP:") && shiftFlag == false) {
@@ -127,7 +127,7 @@ const Track = ({ navigation }) => {
                         maxSpeed = incomingNotification;
                     }
                     speed.push(incomingNotification);
-                    console.log("incomingNotification: ", incomingNotification);
+                    console.log("Speed: ", incomingNotification);
 
                 }
                 else if (incomingNotification.includes("TA:") && shiftFlag == false) {
@@ -135,7 +135,7 @@ const Track = ({ navigation }) => {
                     incomingNotification = parseFloat(incomingNotification);
                     setCurrentAngle(incomingNotification);
                     angle.push(incomingNotification);
-                    console.log("incomingNotification: ", incomingNotification);
+                    console.log("Track Angle: ", incomingNotification);
 
                 }
             }
