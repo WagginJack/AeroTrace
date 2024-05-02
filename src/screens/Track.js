@@ -9,6 +9,7 @@ import { NativeEventEmitter, NativeModules } from 'react-native';
 const { BleManagerModule } = NativeModules;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
+let count = 0;
 let shiftFlag = false;
 let latitude = [];
 let longitude = [];
@@ -17,6 +18,7 @@ let altitude = [];
 let speed = [];
 let angle = [];
 //global variables keeping track of highest speed
+let tempLat = 0;
 let maxSpeed = 0;
 let maxSpeed_latitude = 0;
 let maxSpeed_longitude = 0;
@@ -33,7 +35,7 @@ const Track = ({ navigation }) => {
     const [currentAltitude, setCurrentAltitude] = useState(null);
     const [currentSpeed, setCurrentSpeed] = useState(0);
     const [currentAngle, setCurrentAngle] = useState(0);
-    const [currentCoordinate, setCurrentCoordinate] = useState({ latitude: 0, longitude: 0 });
+    const [currentCoordinate, setCurrentCoordinate] = useState([{ latitude: 0, longitude: 0 }]);
 
     let incomingNotification = "";
 
@@ -93,26 +95,34 @@ const Track = ({ navigation }) => {
                     shiftFlag = false;
                     incomingNotification = incomingNotification.substring(3);
                     incomingNotification = parseFloat(incomingNotification);
-                    latitude.unshift(incomingNotification);
-                    setCurrentLatitude(incomingNotification);
+                    tempLat = incomingNotification;
                     console.log("Latitude: ", incomingNotification);
 
                 }
                 else if (incomingNotification.includes("LO:")) {
                     incomingNotification = incomingNotification.substring(3);
                     incomingNotification = parseFloat(incomingNotification);
-                    if ((longitude.length != 0) && (latitude.length != 1)) {
-                        if (Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]) > 0.0001) {
+                    if (count > 0) {
+                        console.log(Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]));
+                        if (Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]) > 0.000000001) {
+                            latitude.unshift(tempLat);
                             longitude.unshift(incomingNotification);
                             coordinates.unshift({ latitude: latitude[0], longitude: longitude[0] });
                             setCurrentCoordinate(coordinates[0]);
                             setCurrentLongitude(incomingNotification);
+                            setCurrentLatitude(tempLat);
                             console.log("Longitude: ", incomingNotification);
                         }
                         else {
                             latitude.shift();
                             shiftFlag = true;
                         }
+                    }
+                    else {
+                        latitude.unshift(tempLat);
+                        longitude.unshift(incomingNotification);
+                        setCurrentLatitude(tempLat);
+                        setCurrentLongitude(incomingNotification);
                     }
 
                 }
@@ -234,12 +244,17 @@ const Track = ({ navigation }) => {
                     />
 
 
-                    <MapView.Polyline
-                        coordinates={currentCoordinate}
-                        strokeColor={PolylineBlue}
+                    {/* <MapView.Polyline
+                        coordinates={"Latitude: 0, Longitude: 0"}
+                        strokeColor={"#000000"}
                         strokeWidth={5}
-                    />
+                    /> */}
 
+                    <Polyline
+                        coordinates={currentCoordinate}
+                        strokeColor="#000"
+                        strokeWidth={6}
+                    />
 
                     {/* d.segments.map((c) => (
                     <Polyline
@@ -248,6 +263,8 @@ const Track = ({ navigation }) => {
                         strokeWidth={6}>
                     </Polyline>
                     )) */}
+
+
                     {/* {
                         speed.map((d) =>
                             d.segments.map((c) => (
@@ -283,6 +300,8 @@ const Track = ({ navigation }) => {
             <Text>Speed: {currentSpeed} mph</Text>
             <Text>Heading: {currentAngle} °X</Text>
             <Text>Altitude: {currentAltitude} ft</Text>
+            <Text>Latitude: {currentLatitude} °</Text>
+            <Text>Longitude: {currentLongitude} °</Text>
             <Text>Distance: _____ ft</Text>
 
             {/* Incoming Bluetooth Notification */}
