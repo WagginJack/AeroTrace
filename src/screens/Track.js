@@ -45,7 +45,7 @@ const Track = ({ navigation }) => {
     const [maxSpeed, setMaxSpeed] = useState(0);
     const [currentAngle, setCurrentAngle] = useState(0);
     const [currentDistance, setDistance] = useState(0);
-    const [coordinates, setCoordinates] = useState([{latitude: 0, longitude: 0}, {latitude: 50, longitude: 50}]);
+    const [coordinates, setCoordinates] = useState([]);
 
     let incomingNotification = "";
 
@@ -168,8 +168,8 @@ const Track = ({ navigation }) => {
                     //     }
                     // }
                     else {
-                        latitude.unshift(tempLat);
-                        longitude.unshift(incomingNotification);
+                        //latitude.unshift(tempLat);
+                        //longitude.unshift(incomingNotification);
                         setCurrentLatitude(tempLat);
                         setCurrentLongitude(incomingNotification);
                         console.log("Adding Lat: " + currentLatitude + " and Long: " + currentLongitude);
@@ -202,12 +202,11 @@ const Track = ({ navigation }) => {
                     incomingNotification = incomingNotification.substring(3);
                     incomingNotification = parseFloat(incomingNotification);
                     setCurrentSpeed(incomingNotification);
+                    speed.unshift(incomingNotification);
+                    console.log("Speed: ", incomingNotification);
                     if (maxSpeed < incomingNotification) {
                         setMaxSpeed(incomingNotification);
                     }
-                    speed.unshift(incomingNotification);
-                    console.log("Speed: ", incomingNotification);
-
                 }
                 else if (incomingNotification.includes("TA:") && shiftFlag == false) {
                     incomingNotification = incomingNotification.substring(3);
@@ -216,6 +215,9 @@ const Track = ({ navigation }) => {
                     angle.unshift(incomingNotification);
                     console.log("Track Angle: ", incomingNotification);
 
+                }
+                else {
+                    console.log(incomingNotification)
                 }
             }
         );
@@ -247,7 +249,6 @@ const Track = ({ navigation }) => {
                 // });
                 filteredResults.forEach((device) => {
                     if (device.name === BLEname) {
-                        theDevice = device;
                         connectToDevice(device);
                     }
                 });
@@ -255,7 +256,6 @@ const Track = ({ navigation }) => {
             });
         }, 10000);
     };
-
 
     const connectToDevice = (device) => {
         BleManager.connect(device.id).then(() => {
@@ -382,7 +382,7 @@ const Track = ({ navigation }) => {
                     setMaxSpeed(0);
                     console.log("Max Speed: ", maxSpeed);
                     count = 0;
-                    resetCoordinates = 1;
+                    setCoordinates = ([]);
                     setCurrentAltitude(null);
                     setCurrentLatitude(0);
                     setCurrentLongitude(0);
@@ -397,7 +397,8 @@ const Track = ({ navigation }) => {
                     title="Reconnect"
                     onPress={() => {
                         console.log("Reconnecting to: ", BLEname);
-                        connectToDevice(theDevice);
+                        //stopNotificattion()
+                        startScan();
                     }}
                 />
             </View>
