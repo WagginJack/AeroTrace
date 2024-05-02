@@ -114,6 +114,7 @@ const Track = ({ navigation }) => {
                 else if (incomingNotification.includes("AL:") && shiftFlag == false) {
                     incomingNotification = incomingNotification.substring(3);
                     incomingNotification = parseFloat(incomingNotification);
+                    setCurrentAltitude(incomingNotification);
                     altitude.push(incomingNotification);
                     console.log("incomingNotification: ", incomingNotification);
 
@@ -132,6 +133,7 @@ const Track = ({ navigation }) => {
                 else if (incomingNotification.includes("TA:") && shiftFlag == false) {
                     incomingNotification = incomingNotification.substring(3);
                     incomingNotification = parseFloat(incomingNotification);
+                    setCurrentAngle(incomingNotification);
                     angle.push(incomingNotification);
                     console.log("incomingNotification: ", incomingNotification);
 
