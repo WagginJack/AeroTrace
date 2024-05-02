@@ -360,16 +360,14 @@ const Track = ({ navigation }) => {
                 </MapView>
             </View>
             <Text>Speed: {currentSpeed} mph</Text>
-            <Text>Max Speed: {maxSpeed} °</Text>
+            <Text>Max Speed: {maxSpeed} mph</Text>
             <Text>Heading: {currentAngle} °</Text>
             <Text>Altitude: {currentAltitude} ft</Text>
             <Text>Latitude: {currentLatitude} °</Text>
             <Text>Longitude: {currentLongitude} °</Text>
             <Text>Distance: {currentDistance} ft</Text>
 
-            {/* Incoming Bluetooth Notification */}
-            <Text>Message: {incomingNotification}</Text>
-
+        <View style={{ padding: '5%' }}>
             <Button
                 color="#71dc71"
                 title="Reset"
@@ -389,8 +387,8 @@ const Track = ({ navigation }) => {
                     setCurrentAngle(0);
                 }}
             />
-
-            <View style={{ padding: '5%' }}>
+        </View>
+            <View style={{ padding: '1%' }}>
                 <Button
                     color="#0082FC"
                     title="Reconnect"
