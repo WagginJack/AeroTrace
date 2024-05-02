@@ -37,15 +37,15 @@ const Track = ({ navigation }) => {
     const [currentAngle, setCurrentAngle] = useState(0);
     const [coordinates, setCoordinates] = useState([{latitude: 0, longitude: 0}, {latitude: 50, longitude: 50},]);
 
-    function updateCoordinates() {
+    const updateCoordinates = () => {
         console.log("Adding Lat: " + currentLatitude + " and Long: " + currentLongitude);
-        const nextCoordinates = [
+        let nextCoordinates = [
+            // Items before the insertion point:
+            ...coordinates.slice(0, 59),
             // New item:
             {latitude: currentLatitude, longitude: currentLongitude},
-            // Items after the insertion point:
-            ...coordinates.slice(0, 59)
         ];
-        console.log(nextCoordinates)
+        console.log("AllCoordinates are", nextCoordinates)
         setCoordinates(nextCoordinates);
     }
 
@@ -127,8 +127,8 @@ const Track = ({ navigation }) => {
                         console.log("invalid lat/long");
                     }
                     else if (count > 0) {
-                        console.log(Math.abs(incomingNotification - currentLongitude) + Math.abs(tempLat - currentLatitude));
-                        if ((Math.abs(incomingNotification - currentLongitude) + Math.abs(tempLat - currentLatitude)) > 0.000000001) {
+                        console.log("Lat&Long Difference: ",Math.abs(incomingNotification - currentLongitude) + Math.abs(tempLat - currentLatitude));
+                        if ((Math.abs(incomingNotification - currentLongitude) + Math.abs(tempLat - currentLatitude)) > 0.000000000) {
                             //latitude.unshift(tempLat);
                             //longitude.unshift(incomingNotification);
                             //coordinates.unshift({ latitude: latitude[0], longitude: longitude[0] });
@@ -343,6 +343,7 @@ const Track = ({ navigation }) => {
                     console.log("Latitude Length", latitude.length);
                     maxSpeed = 0;
                     console.log("Max Speed: ", maxSpeed);
+                    count = 0;
                     setCurrentAltitude(null);
                     setCurrentLatitude(0);
                     setCurrentLongitude(0);
