@@ -12,6 +12,7 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 let shiftFlag = false;
 let latitude = [];
 let longitude = [];
+let latlong = [];
 let altitude = [];
 let speed = [];
 let angle = [];
@@ -28,8 +29,8 @@ let maxBLEnameOutput = 0;
 const Track = ({ navigation }) => {
 
     const [currentLatitude, setCurrentLatitude] = useState(0);
-    const [currentLongitude, setCurrentLongitude] = useState(0);    
-    const [currentAltitude, setCurrentAltitude] = useState(0);  
+    const [currentLongitude, setCurrentLongitude] = useState(0);
+    const [currentAltitude, setCurrentAltitude] = useState(0);
     const [currentSpeed, setCurrentSpeed] = useState(0);
     const [currentAngle, setCurrentAngle] = useState(0);
 
@@ -43,18 +44,18 @@ const Track = ({ navigation }) => {
 
     RNFS.readFile(path, 'utf8')
         .then((content) => {
-            if(maxBLEnameOutput == 0 && content != ""){
+            if (maxBLEnameOutput == 0 && content != "") {
                 console.log('BLEname is:', content);
                 if (content != "") {
                     BLEname = content;
                     maxBLEnameOutput = 1;
                 }
             }
-            else if (maxBLEnameOutput == 1 && content != ""){
+            else if (maxBLEnameOutput == 1 && content != "") {
                 BLEname = content;
                 maxBLEnameOutput = 1;
             }
-            else if (content == ""){
+            else if (content == "") {
                 console.log('BLEname is empty');
             }
         })
@@ -92,7 +93,8 @@ const Track = ({ navigation }) => {
                     shiftFlag = false;
                     incomingNotification = incomingNotification.substring(3);
                     incomingNotification = parseFloat(incomingNotification);
-                    latitude.push(incomingNotification);
+                    latitude.unshift(incomingNotification);
+                    setCurrentLatitude(incomingNotification);
                     console.log("Latitude: ", incomingNotification);
 
                 }
@@ -101,7 +103,9 @@ const Track = ({ navigation }) => {
                     incomingNotification = parseFloat(incomingNotification);
                     if ((longitude.length != 0) && (latitude.length != 1)) {
                         if (Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]) > 0.0001) {
-                            longitude.push(incomingNotification);
+                            longitude.unshift(incomingNotification);
+                            latlong.unshift({ latitude: latitude[0], longitude: longitude[0] });
+                            setCurrentLongitude(incomingNotification);
                             console.log("Longitude: ", incomingNotification);
                         }
                         else {
@@ -115,7 +119,7 @@ const Track = ({ navigation }) => {
                     incomingNotification = incomingNotification.substring(3);
                     incomingNotification = parseFloat(incomingNotification);
                     setCurrentAltitude(incomingNotification);
-                    altitude.push(incomingNotification);
+                    altitude.unshift(incomingNotification);
                     console.log("Altitude: ", incomingNotification);
 
                 }
@@ -126,7 +130,7 @@ const Track = ({ navigation }) => {
                     if (maxSpeed < incomingNotification) {
                         maxSpeed = incomingNotification;
                     }
-                    speed.push(incomingNotification);
+                    speed.unshift(incomingNotification);
                     console.log("Speed: ", incomingNotification);
 
                 }
@@ -134,7 +138,7 @@ const Track = ({ navigation }) => {
                     incomingNotification = incomingNotification.substring(3);
                     incomingNotification = parseFloat(incomingNotification);
                     setCurrentAngle(incomingNotification);
-                    angle.push(incomingNotification);
+                    angle.unshift(incomingNotification);
                     console.log("Track Angle: ", incomingNotification);
 
                 }
@@ -225,8 +229,22 @@ const Track = ({ navigation }) => {
 
                     <Marker
                         //Map the most recent location of the device
-                        coordinate={{ latitude: 38.957748413, longitude: -95.252746582 }}
+                        coordinate={{ latitude: currentLatitude, longitude: currentLongitude }}
                     />
+
+                    {/* this.state.polylines.map(polyline => {
+                        console.log(polyline.latlngObj)
+                        return (
+                            <MapView.Polyline
+                                key={polyline.key}
+                                coordinates={polyline.latlngObj}
+                                strokeColor={PolylineBlue}
+                                strokeWidth={5}
+                            />
+                        )
+                    }
+                    ) */}
+
                     {/* d.segments.map((c) => (
                     <Polyline
                         coordinates={c.coordinates.map(c => ({ latitude: c[0], longitude: c[1] }))}
@@ -285,15 +303,15 @@ const Track = ({ navigation }) => {
                     console.log("Max Speed: ", maxSpeed);
                 }}
             />
-            
+
             <View style={{ padding: '5%' }}>
-                <Button 
-                color="#0082FC"
-                title="Reconnect"
-                onPress={() => {
-                    console.log("Reconnecting to: ", BLEname);
-                    startScan();
-                }}
+                <Button
+                    color="#0082FC"
+                    title="Reconnect"
+                    onPress={() => {
+                        console.log("Reconnecting to: ", BLEname);
+                        startScan();
+                    }}
                 />
             </View>
         </View>
