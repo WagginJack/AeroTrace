@@ -303,8 +303,8 @@ const Track = ({ navigation }) => {
                     console.log("Max Speed: ", maxSpeed);
                     currentAltitude = null;
                     currentAngle = 0;
-                    currentLatitude = null;
-                    currentLongitude = null;
+                    currentLatitude = 0;
+                    currentLongitude = 0;
                     currentSpeed = 0;
                 }}
             />
