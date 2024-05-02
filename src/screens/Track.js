@@ -37,18 +37,6 @@ const Track = ({ navigation }) => {
     const [currentAngle, setCurrentAngle] = useState(0);
     const [coordinates, setCoordinates] = useState([{latitude: 0, longitude: 0}, {latitude: 50, longitude: 50},]);
 
-    const updateCoordinates = () => {
-        console.log("Adding Lat: " + currentLatitude + " and Long: " + currentLongitude);
-        let nextCoordinates = [
-            // Items before the insertion point:
-            ...coordinates.slice(0, 59),
-            // New item:
-            {latitude: currentLatitude, longitude: currentLongitude},
-        ];
-        console.log("AllCoordinates are", nextCoordinates)
-        setCoordinates(nextCoordinates);
-    }
-
     let incomingNotification = "";
 
     const RNFS = require('react-native-fs');
@@ -94,6 +82,19 @@ const Track = ({ navigation }) => {
         };
     }, []);
 
+    const updateCoordinates = () => {
+        console.log("Adding Lat: " + currentLatitude + " and Long: " + currentLongitude);
+        const nextCoordinates = [
+            // Items before the insertion point: 
+            ...coordinates.slice(0, 59),
+            // New item:
+            {latitude: currentLatitude, longitude: currentLongitude},
+        ];
+        console.log("AllCoordinates are", nextCoordinates)
+        setCoordinates(nextCoordinates);
+    }
+
+
     useEffect(() => {
         const subscription = bleManagerEmitter.addListener(
             'BleManagerDidUpdateValueForCharacteristic',
@@ -126,20 +127,20 @@ const Track = ({ navigation }) => {
                     if (!Number.isFinite(incomingNotification) || !Number.isFinite(tempLat)) {
                         console.log("invalid lat/long");
                     }
-                    else if (count > 0) {
-                        console.log("Lat&Long Difference: ",Math.abs(incomingNotification - currentLongitude) + Math.abs(tempLat - currentLatitude));
-                        if ((Math.abs(incomingNotification - currentLongitude) + Math.abs(tempLat - currentLatitude)) > 0.000000000) {
-                            //latitude.unshift(tempLat);
-                            //longitude.unshift(incomingNotification);
-                            //coordinates.unshift({ latitude: latitude[0], longitude: longitude[0] });
-                            //setCurrentCoordinate(coordinates[0]);
-                            setCurrentLongitude(incomingNotification);
-                            setCurrentLatitude(tempLat);
-                            updateCoordinates();
-                            console.log("Longitude: ", incomingNotification);
-                            count++;
-                        }
-                    }
+                    // else if (count > 0) {
+                    //     console.log("Lat&Long Difference: ",Math.abs(incomingNotification - currentLongitude) + Math.abs(tempLat - currentLatitude));
+                    //     if ((Math.abs(incomingNotification - currentLongitude) + Math.abs(tempLat - currentLatitude)) > 0.000000000) {
+                    //         //latitude.unshift(tempLat);
+                    //         //longitude.unshift(incomingNotification);
+                    //         //coordinates.unshift({ latitude: latitude[0], longitude: longitude[0] });
+                    //         //setCurrentCoordinate(coordinates[0]);
+                    //         setCurrentLongitude(incomingNotification);
+                    //         setCurrentLatitude(tempLat);
+                    //         updateCoordinates();
+                    //         console.log("Longitude: ", incomingNotification);
+                    //         count++;
+                    //     }
+                    // }
                     else {
                         latitude.unshift(tempLat);
                         longitude.unshift(incomingNotification);
