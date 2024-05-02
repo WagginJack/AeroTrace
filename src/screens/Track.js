@@ -105,8 +105,8 @@ const Track = ({ navigation }) => {
                     shiftFlag = false;
                     incomingNotification = incomingNotification.substring(3);
                     incomingNotification = parseFloat(incomingNotification);
-                    //tempLat = incomingNotification;
-                    setCurrentLatitude(incomingNotification);
+                    tempLat = incomingNotification;
+                    //setCurrentLatitude(incomingNotification);
                     console.log("Latitude: ", incomingNotification);
 
                 }
@@ -115,34 +115,32 @@ const Track = ({ navigation }) => {
                     incomingNotification = incomingNotification.substring(5);
                     console.log("before ParseFloat: " + incomingNotification);
                     incomingNotification = parseFloat(incomingNotification);
-                    setCurrentLongitude(incomingNotification);
+                    //setCurrentLongitude(incomingNotification);
                     //console.log(Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]));
                     console.log("Longitude: ", incomingNotification);
                     longitude.unshift(incomingNotification);
 
-                    //if (count > 0) {
-                    //console.log(Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]));
-                    // if (Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]) > 0.000000001) {
-                    //     latitude.unshift(tempLat);
-                    //     longitude.unshift(incomingNotification);
-                    //     coordinates.unshift({ latitude: latitude[0], longitude: longitude[0] });
-                    //     setCurrentCoordinate(coordinates[0]);
-                    //     setCurrentLongitude(incomingNotification);
-                    //     //setCurrentLatitude(tempLat);
-                    //     console.log("Longitude: ", incomingNotification);
-                    //     count++;
-                    // }
-                    // else {
-                    //     latitude.shift();
-                    //     shiftFlag = true;
-                    // }
+                    if (count > 0) {
+                        console.log(Math.abs(incomingNotification - currentLongitude) + Math.abs(tempLat - currentLatitude));
+                        if ((Math.abs(incomingNotification - currentLongitude) + Math.abs(tempLat - currentLatitude)) > 0.000000001) {
+                            latitude.unshift(tempLat);
+                            longitude.unshift(incomingNotification);
+                            coordinates.unshift({ latitude: latitude[0], longitude: longitude[0] });
+                            setCurrentCoordinate(coordinates[0]);
+                            setCurrentLongitude(incomingNotification);
+                            setCurrentLatitude(tempLat);
+                            console.log("Longitude: ", incomingNotification);
+                            count++;
+                        }
+                    }
+                    else {
+                        latitude.unshift(tempLat);
+                        longitude.unshift(incomingNotification);
+                        setCurrentLatitude(tempLat);
+                        setCurrentLongitude(incomingNotification);
+                    }
                 }
-                // else {
-                //     latitude.unshift(tempLat);
-                //     longitude.unshift(incomingNotification);
-                //     //setCurrentLatitude(tempLat);
-                //     setCurrentLongitude(incomingNotification);
-                // }
+
 
 
                 else if (incomingNotification.includes("AL:") && shiftFlag == false) {
