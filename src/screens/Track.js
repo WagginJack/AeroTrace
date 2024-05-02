@@ -95,37 +95,46 @@ const Track = ({ navigation }) => {
                     shiftFlag = false;
                     incomingNotification = incomingNotification.substring(3);
                     incomingNotification = parseFloat(incomingNotification);
-                    tempLat = incomingNotification;
+                    //tempLat = incomingNotification;
+                    setCurrentLatitude(incomingNotification);
                     console.log("Latitude: ", incomingNotification);
 
                 }
                 else if (incomingNotification.includes("LO:")) {
-                    incomingNotification = incomingNotification.substring(3);
+                    console.log(incomingNotification);
+                    incomingNotification = incomingNotification.substring(5);
+                    console.log("before ParseFloat: " + incomingNotification);
                     incomingNotification = parseFloat(incomingNotification);
-                    if (count > 0) {
-                        console.log(Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]));
-                        if (Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]) > 0.000000001) {
-                            latitude.unshift(tempLat);
-                            longitude.unshift(incomingNotification);
-                            coordinates.unshift({ latitude: latitude[0], longitude: longitude[0] });
-                            setCurrentCoordinate(coordinates[0]);
-                            setCurrentLongitude(incomingNotification);
-                            setCurrentLatitude(tempLat);
-                            console.log("Longitude: ", incomingNotification);
-                        }
-                        else {
-                            latitude.shift();
-                            shiftFlag = true;
-                        }
-                    }
-                    else {
-                        latitude.unshift(tempLat);
-                        longitude.unshift(incomingNotification);
-                        setCurrentLatitude(tempLat);
-                        setCurrentLongitude(incomingNotification);
-                    }
+                    setCurrentLongitude(incomingNotification);
+                    //console.log(Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]));
+                    console.log("Longitude: ", incomingNotification);
+                    longitude.unshift(incomingNotification);
 
-                }
+                    //if (count > 0) {
+                        //console.log(Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]));
+                        // if (Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]) > 0.000000001) {
+                        //     latitude.unshift(tempLat);
+                        //     longitude.unshift(incomingNotification);
+                        //     coordinates.unshift({ latitude: latitude[0], longitude: longitude[0] });
+                        //     setCurrentCoordinate(coordinates[0]);
+                        //     setCurrentLongitude(incomingNotification);
+                        //     //setCurrentLatitude(tempLat);
+                        //     console.log("Longitude: ", incomingNotification);
+                        //     count++;
+                        // }
+                        // else {
+                        //     latitude.shift();
+                        //     shiftFlag = true;
+                        // }
+                    }
+                    // else {
+                    //     latitude.unshift(tempLat);
+                    //     longitude.unshift(incomingNotification);
+                    //     //setCurrentLatitude(tempLat);
+                    //     setCurrentLongitude(incomingNotification);
+                    // }
+
+                
                 else if (incomingNotification.includes("AL:") && shiftFlag == false) {
                     incomingNotification = incomingNotification.substring(3);
                     incomingNotification = parseFloat(incomingNotification);
@@ -250,11 +259,11 @@ const Track = ({ navigation }) => {
                         strokeWidth={5}
                     /> */}
 
-                    <Polyline
+                    {/* <Polyline
                         coordinates={currentCoordinate}
                         strokeColor="#000"
                         strokeWidth={6}
-                    />
+                    /> */}
 
                     {/* d.segments.map((c) => (
                     <Polyline
