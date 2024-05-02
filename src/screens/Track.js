@@ -149,7 +149,7 @@ const Track = ({ navigation }) => {
                         console.log("Adding Lat: " + currentLatitude + " and Long: " + currentLongitude);
                         let newCoordinate = {latitude: currentLatitude, longitude: currentLongitude};
                         console.log("New coordinates: ", newCoordinate);
-                        setCoordinates([...coordinates, newCoordinate]);
+                        setCoordinates(coordinates => [...coordinates, newCoordinate]);
                         console.log("All Coordinates are", coordinates);
                         //updateCoordinates();nnnn    nn
                         count++;    
