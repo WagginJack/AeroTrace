@@ -35,7 +35,17 @@ const Track = ({ navigation }) => {
     const [currentAltitude, setCurrentAltitude] = useState(null);
     const [currentSpeed, setCurrentSpeed] = useState(0);
     const [currentAngle, setCurrentAngle] = useState(0);
-    const [currentCoordinate, setCurrentCoordinate] = useState([{ latitude: 0, longitude: 0 }]);
+    const [coordinates, setCoordinates] = useState([{ latitude: 0, longitude: 0 },]);
+
+    function updateCoordinates() {
+        const nextCoordinates = [
+            // New item:
+            { latitude: currentLatitude, longitude: currentLongitude },
+            // Items after the insertion point:
+            ...coordinates.slice(0, 60)
+        ];
+        setCoordinates(nextCoordinates);
+    }
 
     let incomingNotification = "";
 
@@ -111,30 +121,30 @@ const Track = ({ navigation }) => {
                     longitude.unshift(incomingNotification);
 
                     //if (count > 0) {
-                        //console.log(Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]));
-                        // if (Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]) > 0.000000001) {
-                        //     latitude.unshift(tempLat);
-                        //     longitude.unshift(incomingNotification);
-                        //     coordinates.unshift({ latitude: latitude[0], longitude: longitude[0] });
-                        //     setCurrentCoordinate(coordinates[0]);
-                        //     setCurrentLongitude(incomingNotification);
-                        //     //setCurrentLatitude(tempLat);
-                        //     console.log("Longitude: ", incomingNotification);
-                        //     count++;
-                        // }
-                        // else {
-                        //     latitude.shift();
-                        //     shiftFlag = true;
-                        // }
-                    }
-                    // else {
+                    //console.log(Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]));
+                    // if (Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]) > 0.000000001) {
                     //     latitude.unshift(tempLat);
                     //     longitude.unshift(incomingNotification);
-                    //     //setCurrentLatitude(tempLat);
+                    //     coordinates.unshift({ latitude: latitude[0], longitude: longitude[0] });
+                    //     setCurrentCoordinate(coordinates[0]);
                     //     setCurrentLongitude(incomingNotification);
+                    //     //setCurrentLatitude(tempLat);
+                    //     console.log("Longitude: ", incomingNotification);
+                    //     count++;
                     // }
+                    // else {
+                    //     latitude.shift();
+                    //     shiftFlag = true;
+                    // }
+                }
+                // else {
+                //     latitude.unshift(tempLat);
+                //     longitude.unshift(incomingNotification);
+                //     //setCurrentLatitude(tempLat);
+                //     setCurrentLongitude(incomingNotification);
+                // }
 
-                
+
                 else if (incomingNotification.includes("AL:") && shiftFlag == false) {
                     incomingNotification = incomingNotification.substring(3);
                     incomingNotification = parseFloat(incomingNotification);
