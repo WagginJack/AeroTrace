@@ -35,7 +35,7 @@ const Track = ({ navigation }) => {
     const [currentAltitude, setCurrentAltitude] = useState(null);
     const [currentSpeed, setCurrentSpeed] = useState(0);
     const [currentAngle, setCurrentAngle] = useState(0);
-    const [coordinates, setCoordinates] = useState([{latitude: 0, longitude: 0}, {latitude: 50, longitude: 50},]);
+    const [coordinates, setCoordinates] = useState([{latitude: 0, longitude: 0}, {latitude: 50, longitude: 50}]);
 
     let incomingNotification = "";
 
@@ -146,9 +146,12 @@ const Track = ({ navigation }) => {
                         longitude.unshift(incomingNotification);
                         setCurrentLatitude(tempLat);
                         setCurrentLongitude(incomingNotification);
-                        let newCoordinate = {Latitude: currentLatitude, Longitude: currentLongitude};
+                        console.log("Adding Lat: " + currentLatitude + " and Long: " + currentLongitude);
+                        let newCoordinate = {latitude: currentLatitude, longitude: currentLongitude};
+                        console.log("New coordinates: ", newCoordinate);
                         setCoordinates([...coordinates, newCoordinate]);
-                        //updateCoordinates();
+                        console.log("All Coordinates are", coordinates);
+                        //updateCoordinates();nnnn    nn
                         count++;    
                     }
                 }
