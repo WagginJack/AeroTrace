@@ -19,12 +19,14 @@ let speed = [];
 let angle = [];
 //global variables keeping track of highest speed
 let tempLat = 0;
-let maxSpeed = 0;
-let maxSpeed_latitude = 0;
-let maxSpeed_longitude = 0;
-let maxSpeed_altitude = 0;
-let maxSpeed_angle = 0;
+//let maxSpeed = 0;
+// let maxSpeed_latitude = 0;
+// let maxSpeed_longitude = 0;
+// let maxSpeed_altitude = 0;
+// let maxSpeed_angle = 0;
 //globalvariables for current variables
+let firstLatitude = 0;
+let firstLongitude = 0;
 
 let maxBLEnameOutput = 0;
 
@@ -34,7 +36,9 @@ const Track = ({ navigation }) => {
     const [currentLongitude, setCurrentLongitude] = useState(0);
     const [currentAltitude, setCurrentAltitude] = useState(null);
     const [currentSpeed, setCurrentSpeed] = useState(0);
+    const [maxSpeed, setMaxSpeed] = useState(0);
     const [currentAngle, setCurrentAngle] = useState(0);
+    const [currentDistance, setDistance] = useState(0);
     const [coordinates, setCoordinates] = useState([{latitude: 0, longitude: 0}, {latitude: 50, longitude: 50}]);
 
     let incomingNotification = "";
@@ -152,7 +156,13 @@ const Track = ({ navigation }) => {
                         setCoordinates(coordinates => [...coordinates, newCoordinate]);
                         console.log("All Coordinates are", coordinates);
                         //updateCoordinates();nnnn    nn
-                        count++;    
+                        count++;
+                        
+                        
+                        //calculate Distance
+                        let calculatedDistance = Math.acos(Math.sin(currentLatitude) * Math.sin(firstLatitude) + Math.cos(currentLatitude) * Math.cos(firstLatitude) * Math.cos(currentLongitude - firstLongitude)) * 20902560;
+                        setDistance(calculatedDistance);
+
                     }
                 }
 
@@ -171,7 +181,7 @@ const Track = ({ navigation }) => {
                     incomingNotification = parseFloat(incomingNotification);
                     setCurrentSpeed(incomingNotification);
                     if (maxSpeed < incomingNotification) {
-                        maxSpeed = incomingNotification;
+                        setMaxSpeed(incomingNotification);
                     }
                     speed.unshift(incomingNotification);
                     console.log("Speed: ", incomingNotification);
@@ -330,11 +340,12 @@ const Track = ({ navigation }) => {
                 </MapView>
             </View>
             <Text>Speed: {currentSpeed} mph</Text>
+            <Text>Max Speed: {maxSpeed} °</Text>
             <Text>Heading: {currentAngle} °</Text>
             <Text>Altitude: {currentAltitude} ft</Text>
             <Text>Latitude: {currentLatitude} °</Text>
             <Text>Longitude: {currentLongitude} °</Text>
-            <Text>Distance: _____ ft</Text>
+            <Text>Distance: {currentDistance} ft</Text>
 
             {/* Incoming Bluetooth Notification */}
             <Text>Message: {incomingNotification}</Text>
@@ -347,7 +358,7 @@ const Track = ({ navigation }) => {
                     console.log("Reset Button Pressed");
                     console.log(coordinates);
                     console.log("Latitude Length", latitude.length);
-                    maxSpeed = 0;
+                    setMaxSpeed(0);
                     console.log("Max Speed: ", maxSpeed);
                     count = 0;
                     setCurrentAltitude(null);
