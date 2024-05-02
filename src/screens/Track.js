@@ -301,6 +301,11 @@ const Track = ({ navigation }) => {
                     console.log("Latitude Length", latitude.length);
                     maxSpeed = 0;
                     console.log("Max Speed: ", maxSpeed);
+                    currentAltitude = null;
+                    currentAngle = 0;
+                    currentLatitude = null;
+                    currentLongitude = null;
+                    currentSpeed = 0;
                 }}
             />
 
