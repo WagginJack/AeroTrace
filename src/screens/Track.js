@@ -42,12 +42,8 @@ const Track = ({ navigation }) => {
     const [currentSpeed, setCurrentSpeed] = useState(0);
     const [maxSpeed, setMaxSpeed] = useState(0);
     const [currentAngle, setCurrentAngle] = useState(0);
-<<<<<<< HEAD
     const [currentDistance, setDistance] = useState(0);
     const [coordinates, setCoordinates] = useState([{latitude: 0, longitude: 0}, {latitude: 50, longitude: 50}]);
-=======
-    const [coordinates, setCoordinates] = useState([{ latitude: 0, longitude: 0 },]);
->>>>>>> 5210c13863882a473f4f1262ea3550c4c1367ad7
 
     let incomingNotification = "";
 
@@ -181,15 +177,12 @@ const Track = ({ navigation }) => {
                         // console.log("All Coordinates are", coordinates);
                         //updateCoordinates();nnnn    nn
                         count++;
-<<<<<<< HEAD
                         
                         
                         //calculate Distance
                         let calculatedDistance = Math.acos(Math.sin(currentLatitude) * Math.sin(firstLatitude) + Math.cos(currentLatitude) * Math.cos(firstLatitude) * Math.cos(currentLongitude - firstLongitude)) * 20902560;
                         setDistance(calculatedDistance);
 
-=======
->>>>>>> 5210c13863882a473f4f1262ea3550c4c1367ad7
                     }
                 }
 
