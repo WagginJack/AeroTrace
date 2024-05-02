@@ -146,7 +146,9 @@ const Track = ({ navigation }) => {
                         longitude.unshift(incomingNotification);
                         setCurrentLatitude(tempLat);
                         setCurrentLongitude(incomingNotification);
-                        updateCoordinates();
+                        let newCoordinate = {Latitude: currentLatitude, Longitude: currentLongitude};
+                        setCoordinates([...coordinates, newCoordinate]);
+                        //updateCoordinates();
                         count++;    
                     }
                 }
