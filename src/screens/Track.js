@@ -28,6 +28,10 @@ let maxSpeed_angle = 0;
 
 let maxBLEnameOutput = 0;
 
+let firstCoordinate = 0;
+
+let resetCoordinates = 0;
+
 const Track = ({ navigation }) => {
 
     const [currentLatitude, setCurrentLatitude] = useState(0);
@@ -35,7 +39,7 @@ const Track = ({ navigation }) => {
     const [currentAltitude, setCurrentAltitude] = useState(null);
     const [currentSpeed, setCurrentSpeed] = useState(0);
     const [currentAngle, setCurrentAngle] = useState(0);
-    const [coordinates, setCoordinates] = useState([{latitude: 0, longitude: 0}, {latitude: 50, longitude: 50}]);
+    const [coordinates, setCoordinates] = useState([{ latitude: 0, longitude: 0 },]);
 
     let incomingNotification = "";
 
@@ -82,18 +86,34 @@ const Track = ({ navigation }) => {
         };
     }, []);
 
-    const updateCoordinates = () => {
-        console.log("Adding Lat: " + currentLatitude + " and Long: " + currentLongitude);
-        const nextCoordinates = [
-            // Items before the insertion point: 
-            ...coordinates.slice(0, 59),
-            // New item:
-            {latitude: currentLatitude, longitude: currentLongitude},
-        ];
-        console.log("AllCoordinates are", nextCoordinates)
-        setCoordinates(nextCoordinates);
-    }
+    // const updateCoordinates = () => {
+    //     console.log("Adding Lat: " + currentLatitude + " and Long: " + currentLongitude);
+    //     const nextCoordinates = [
+    //         // Items before the insertion point: 
+    //         ...coordinates.slice(0, 59),
+    //         // New item:
+    //         {latitude: currentLatitude, longitude: currentLongitude},
+    //     ];
+    //     console.log("AllCoordinates are", nextCoordinates)
+    //     setCoordinates(nextCoordinates);
+    // }
 
+    useEffect(() => {
+        if (resetCoordinates == 1){
+            setCoordinates([]);
+        }
+        else if (currentLatitude != 0 && currentLongitude != 0) {
+            if (firstCoordinate == 0){
+                let newCoordinate = { latitude: currentLatitude, longitude: currentLongitude };
+                setCoordinates([newCoordinate]);
+                firstCoordinate++;
+            }
+            else{
+                let newCoordinate = { latitude: currentLatitude, longitude: currentLongitude };
+                setCoordinates(prevCoordinates => [...prevCoordinates, newCoordinate]);
+            }
+        }
+    }, [currentLongitude]);
 
     useEffect(() => {
         const subscription = bleManagerEmitter.addListener(
@@ -147,12 +167,12 @@ const Track = ({ navigation }) => {
                         setCurrentLatitude(tempLat);
                         setCurrentLongitude(incomingNotification);
                         console.log("Adding Lat: " + currentLatitude + " and Long: " + currentLongitude);
-                        let newCoordinate = {latitude: currentLatitude, longitude: currentLongitude};
-                        console.log("New coordinates: ", newCoordinate);
-                        setCoordinates(coordinates => [...coordinates, newCoordinate]);
-                        console.log("All Coordinates are", coordinates);
+                        // let newCoordinate = {latitude: currentLatitude, longitude: currentLongitude};
+                        // console.log("New coordinates: ", newCoordinate);
+                        // setCoordinates(coordinates => [...coordinates, newCoordinate]);
+                        // console.log("All Coordinates are", coordinates);
                         //updateCoordinates();nnnn    nn
-                        count++;    
+                        count++;
                     }
                 }
 
@@ -350,6 +370,7 @@ const Track = ({ navigation }) => {
                     maxSpeed = 0;
                     console.log("Max Speed: ", maxSpeed);
                     count = 0;
+                    resetCoordinates = 1;
                     setCurrentAltitude(null);
                     setCurrentLatitude(0);
                     setCurrentLongitude(0);
