@@ -34,7 +34,7 @@ let firstCoordinate = 0;
 
 let resetCoordinates = 0;
 
-let theDevice;
+let theDevice = {};
 
 const Track = ({ navigation }) => {
 
@@ -249,6 +249,9 @@ const Track = ({ navigation }) => {
                 // });
                 filteredResults.forEach((device) => {
                     if (device.name === BLEname) {
+                        console.log("The Device is: ", device);
+                        theDevice = device;
+                        console.log("The Saved Device is: ", theDevice);
                         connectToDevice(device);
                     }
                 });
@@ -266,6 +269,7 @@ const Track = ({ navigation }) => {
                 const characteristicUUID = 'adaf0003-4369-7263-7569-74507974686e';
                 BleManager.startNotification(device.id, serviceUUID, characteristicUUID).then(() => {
                     console.log('Notifications started');
+                    console.log("Device ID: ", device.id);
                     //setNotificationOn(true); // This will cause a re-render
                 }).catch((error) => {
                     console.log('Failed to start notifications:', error);
@@ -398,7 +402,8 @@ const Track = ({ navigation }) => {
                     onPress={() => {
                         console.log("Reconnecting to: ", BLEname);
                         //stopNotificattion()
-                        startScan();
+                        //startScan();
+                        connectToDevice(theDevice);
                     }}
                 />
             </View>
