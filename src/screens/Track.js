@@ -48,21 +48,18 @@ const Track = ({ navigation }) => {
     const [currentDistance, setDistance] = useState(0);
     const [coordinates, setCoordinates] = useState([]);
 
+    //phone location
     const [position, setPosition] = useState({
-        latitude: 38.957748413,
-        longitude: -95.252746582,
-        latitudeDelta: 0.001,
-        longitudeDelta: 0.001,
+        latitude: 0,
+        longitude: 0,
     });
-
+    //update phone location
     useEffect(() => {
         Geolocation.getCurrentPosition((pos) => {
           const crd = pos.coords;
           setPosition({
             latitude: crd.latitude,
             longitude: crd.longitude,
-            latitudeDelta: 0.0421,
-            longitudeDelta: 0.0421,
           });
           console.log("lat: " + crd.latitude + " long: " + crd.longitude)
         })
@@ -305,19 +302,17 @@ const Track = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            {/* <View style={styles.bluetooth}>
-                <ImageButton
-                    onPress={() => navigation.navigate('Bluetooth')}
-                    imageStyle={styles.image_bluetooth}
-                    source={require("../../assets/icon.png")}
-                />
-            </View> */}
             <View style={styles.map}>
                 <MapView
                     // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
                     // followsUserLocation={true}
                     style={styles.map}
-                    initialRegion={position}
+                    region={{
+                        latitude: position.latitude,
+                        longitude: position.longitude,
+                        latitudeDelta: 0.001,
+                        longitudeDelta: 0.001,
+                    }}
                     //showsUserLocation={true}
                     //showsMyLocationButton={false}
                     //followsUserLocation={true}
