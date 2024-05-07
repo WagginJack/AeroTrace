@@ -2,6 +2,7 @@ import { ImageBackground, Button, StyleSheet, Text, View } from 'react-native'
 import React, { useState, useEffect, useDebugValue } from 'react';
 import ImageButton from '../../components/ImageButton';
 import MapView, { Marker, Polyline, } from 'react-native-maps';
+import Geolocation from '@react-native-community/geolocation';
 
 // These are for BLE listener events
 import BleManager from 'react-native-ble-manager';
@@ -46,6 +47,26 @@ const Track = ({ navigation }) => {
     const [currentAngle, setCurrentAngle] = useState(0);
     const [currentDistance, setDistance] = useState(0);
     const [coordinates, setCoordinates] = useState([]);
+
+    const [position, setPosition] = useState({
+        latitude: 38.957748413,
+        longitude: -95.252746582,
+        latitudeDelta: 0.001,
+        longitudeDelta: 0.001,
+    });
+
+    useEffect(() => {
+        Geolocation.getCurrentPosition((pos) => {
+          const crd = pos.coords;
+          setPosition({
+            latitude: crd.latitude,
+            longitude: crd.longitude,
+            latitudeDelta: 0.0421,
+            longitudeDelta: 0.0421,
+          });
+          console.log("lat: " + crd.latitude + " long: " + crd.longitude)
+        })
+      }, []);
 
     let incomingNotification = "";
 
@@ -105,16 +126,16 @@ const Track = ({ navigation }) => {
     // }
 
     useEffect(() => {
-        if (resetCoordinates == 1){
+        if (resetCoordinates == 1) {
             setCoordinates([]);
         }
         else if (currentLatitude != 0 && currentLongitude != 0) {
-            if (firstCoordinate == 0){
+            if (firstCoordinate == 0) {
                 let newCoordinate = { latitude: currentLatitude, longitude: currentLongitude };
                 setCoordinates([newCoordinate]);
                 firstCoordinate++;
             }
-            else{
+            else {
                 let newCoordinate = { latitude: currentLatitude, longitude: currentLongitude };
                 setCoordinates(prevCoordinates => [...prevCoordinates, newCoordinate]);
             }
@@ -179,8 +200,8 @@ const Track = ({ navigation }) => {
                         // console.log("All Coordinates are", coordinates);
                         //updateCoordinates();nnnn    nn
                         count++;
-                        
-                        
+
+
                         //calculate Distance
                         let calculatedDistance = Math.acos(Math.sin(currentLatitude) * Math.sin(firstLatitude) + Math.cos(currentLatitude) * Math.cos(firstLatitude) * Math.cos(currentLongitude - firstLongitude)) * 20902560;
                         setDistance(calculatedDistance);
@@ -294,13 +315,17 @@ const Track = ({ navigation }) => {
             <View style={styles.map}>
                 <MapView
                     // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+                    // followsUserLocation={true}
                     style={styles.map}
-                    region={{
-                        latitude: 38.957748413,
-                        longitude: -95.252746582,
-                        latitudeDelta: 0.0015,
-                        longitudeDelta: 0.00120,
-                    }}
+                    initialRegion={position}
+                    //showsUserLocation={true}
+                    //showsMyLocationButton={false}
+                    //followsUserLocation={true}
+                    //showsCompass={true}
+                    scrollEnabled={true}
+                    zoomEnabled={true}
+                    //pitchEnabled={true}
+                    rotateEnabled={true}
                 >
 
                     <Marker
@@ -370,27 +395,27 @@ const Track = ({ navigation }) => {
             <Text>Longitude: {currentLongitude} °</Text>
             <Text>Distance: {currentDistance} ft</Text>
 
-        <View style={{ padding: '5%' }}>
-            <Button
-                color="#71dc71"
-                title="Reset"
+            <View style={{ padding: '5%' }}>
+                <Button
+                    color="#71dc71"
+                    title="Reset"
 
-                onPress={() => {
-                    console.log("Reset Button Pressed");
-                    console.log(coordinates);
-                    console.log("Latitude Length", latitude.length);
-                    setMaxSpeed(0);
-                    console.log("Max Speed: ", maxSpeed);
-                    count = 0;
-                    setCoordinates = ([]);
-                    setCurrentAltitude(null);
-                    setCurrentLatitude(0);
-                    setCurrentLongitude(0);
-                    setCurrentSpeed(0);
-                    setCurrentAngle(0);
-                }}
-            />
-        </View>
+                    onPress={() => {
+                        console.log("Reset Button Pressed");
+                        console.log(coordinates);
+                        console.log("Latitude Length", latitude.length);
+                        setMaxSpeed(0);
+                        console.log("Max Speed: ", maxSpeed);
+                        count = 0;
+                        setCoordinates = ([]);
+                        setCurrentAltitude(null);
+                        setCurrentLatitude(0);
+                        setCurrentLongitude(0);
+                        setCurrentSpeed(0);
+                        setCurrentAngle(0);
+                    }}
+                />
+            </View>
             <View style={{ padding: '1%' }}>
                 <Button
                     color="#0082FC"
