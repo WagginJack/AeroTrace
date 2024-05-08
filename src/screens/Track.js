@@ -374,7 +374,7 @@ const Track = ({ navigation }) => {
             <Text>Longitude: {currentLongitude} °</Text>
             <Text>Distance: {currentDistance} ft</Text>
 
-        <View style={{ padding: '5%' }}>
+        <View style={{ paddingTop: '4%', paddingBottom: '2%' }}>
             <Button
                 color="#71dc71"
                 title="Reset"
@@ -386,7 +386,7 @@ const Track = ({ navigation }) => {
                     setMaxSpeed(0);
                     console.log("Max Speed: ", maxSpeed);
                     count = 0;
-                    setCoordinates = ([]);
+                    setCoordinates([]);
                     setCurrentAltitude(null);
                     setCurrentLatitude(0);
                     setCurrentLongitude(0);
@@ -395,7 +395,7 @@ const Track = ({ navigation }) => {
                 }}
             />
         </View>
-            <View style={{ padding: '1%' }}>
+            <View style={{ padding: '2%' }}>
                 <Button
                     color="#0082FC"
                     title="Reconnect"
@@ -404,6 +404,18 @@ const Track = ({ navigation }) => {
                         //stopNotificattion()
                         //startScan();
                         connectToDevice(theDevice);
+                    }}
+                />
+            </View>
+            <View style={{ paddingTop: '2%' }}>
+                <Button
+                    color="#0082FC"
+                    title="Rescan"
+                    onPress={() => {
+                        console.log("Rescanning for: ", BLEname);
+                        //stopNotificattion()
+                        //startScan();
+                        startScan();
                     }}
                 />
             </View>
