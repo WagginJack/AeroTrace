@@ -33,8 +33,6 @@ let maxBLEnameOutput = 0;
 
 let firstCoordinate = 0;
 
-let resetCoordinates = 0;
-
 let theDevice = {};
 
 const Track = ({ navigation }) => {
@@ -66,10 +64,8 @@ const Track = ({ navigation }) => {
       }, []);
 
     let incomingNotification = "";
-
     const RNFS = require('react-native-fs');
     const path = RNFS.DocumentDirectoryPath + '/BLEID.txt';
-
     let BLEname = "";
 
     RNFS.readFile(path, 'utf8')
@@ -122,11 +118,10 @@ const Track = ({ navigation }) => {
     //     setCoordinates(nextCoordinates);
     // }
 
+    //Update polyline
     useEffect(() => {
-        if (resetCoordinates == 1) {
-            setCoordinates([]);
-        }
-        else if (currentLatitude != 0 && currentLongitude != 0) {
+        if (currentLatitude != 0 && currentLongitude != 0) {
+            console.log("Adding Lat: " + currentLatitude + " and Long: " + currentLongitude);
             if (firstCoordinate == 0) {
                 let newCoordinate = { latitude: currentLatitude, longitude: currentLongitude };
                 setCoordinates([newCoordinate]);
@@ -139,6 +134,7 @@ const Track = ({ navigation }) => {
         }
     }, [currentLongitude]);
 
+    //Recives Data from MCU
     useEffect(() => {
         const subscription = bleManagerEmitter.addListener(
             'BleManagerDidUpdateValueForCharacteristic',
@@ -190,7 +186,7 @@ const Track = ({ navigation }) => {
                         //longitude.unshift(incomingNotification);
                         setCurrentLatitude(tempLat);
                         setCurrentLongitude(incomingNotification);
-                        console.log("Adding Lat: " + currentLatitude + " and Long: " + currentLongitude);
+                        //console.log("Adding Lat: " + currentLatitude + " and Long: " + currentLongitude);
                         // let newCoordinate = {latitude: currentLatitude, longitude: currentLongitude};
                         // console.log("New coordinates: ", newCoordinate);
                         // setCoordinates(coordinates => [...coordinates, newCoordinate]);
@@ -407,6 +403,7 @@ const Track = ({ navigation }) => {
                     console.log("Max Speed: ", maxSpeed);
                     count = 0;
                     setCoordinates([]);
+                    firstCoordinate = 0;
                     setCurrentAltitude(null);
                     setCurrentLatitude(0);
                     setCurrentLongitude(0);
@@ -430,7 +427,7 @@ const Track = ({ navigation }) => {
             <View style={{ paddingTop: '2%' }}>
                 <Button
                     color="#0082FC"
-                    title="Rescan"
+                    title="Scan"
                     onPress={() => {
                         console.log("Rescanning for: ", BLEname);
                         //stopNotificattion()
