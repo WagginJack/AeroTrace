@@ -35,7 +35,7 @@ let firstCoordinate = 0;
 
 let resetCoordinates = 0;
 
-let theDevice;
+let theDevice = {};
 
 const Track = ({ navigation }) => {
 
@@ -267,6 +267,9 @@ const Track = ({ navigation }) => {
                 // });
                 filteredResults.forEach((device) => {
                     if (device.name === BLEname) {
+                        console.log("The Device is: ", device);
+                        theDevice = device;
+                        console.log("The Saved Device is: ", theDevice);
                         connectToDevice(device);
                     }
                 });
@@ -284,6 +287,7 @@ const Track = ({ navigation }) => {
                 const characteristicUUID = 'adaf0003-4369-7263-7569-74507974686e';
                 BleManager.startNotification(device.id, serviceUUID, characteristicUUID).then(() => {
                     console.log('Notifications started');
+                    console.log("Device ID: ", device.id);
                     //setNotificationOn(true); // This will cause a re-render
                 }).catch((error) => {
                     console.log('Failed to start notifications:', error);
@@ -390,34 +394,47 @@ const Track = ({ navigation }) => {
             <Text>Longitude: {currentLongitude} °</Text>
             <Text>Distance: {currentDistance} ft</Text>
 
-            <View style={{ padding: '5%' }}>
+            <View style={{ paddingTop: '4%', paddingBottom: '2%' }}>
                 <Button
                     color="#71dc71"
                     title="Reset"
 
-                    onPress={() => {
-                        console.log("Reset Button Pressed");
-                        console.log(coordinates);
-                        console.log("Latitude Length", latitude.length);
-                        setMaxSpeed(0);
-                        console.log("Max Speed: ", maxSpeed);
-                        count = 0;
-                        setCoordinates = ([]);
-                        setCurrentAltitude(null);
-                        setCurrentLatitude(0);
-                        setCurrentLongitude(0);
-                        setCurrentSpeed(0);
-                        setCurrentAngle(0);
-                    }}
-                />
-            </View>
-            <View style={{ padding: '1%' }}>
+                onPress={() => {
+                    console.log("Reset Button Pressed");
+                    console.log(coordinates);
+                    console.log("Latitude Length", latitude.length);
+                    setMaxSpeed(0);
+                    console.log("Max Speed: ", maxSpeed);
+                    count = 0;
+                    setCoordinates([]);
+                    setCurrentAltitude(null);
+                    setCurrentLatitude(0);
+                    setCurrentLongitude(0);
+                    setCurrentSpeed(0);
+                    setCurrentAngle(0);
+                }}
+            />
+        </View>
+            <View style={{ padding: '2%' }}>
                 <Button
                     color="#0082FC"
                     title="Reconnect"
                     onPress={() => {
                         console.log("Reconnecting to: ", BLEname);
                         //stopNotificattion()
+                        //startScan();
+                        connectToDevice(theDevice);
+                    }}
+                />
+            </View>
+            <View style={{ paddingTop: '2%' }}>
+                <Button
+                    color="#0082FC"
+                    title="Rescan"
+                    onPress={() => {
+                        console.log("Rescanning for: ", BLEname);
+                        //stopNotificattion()
+                        //startScan();
                         startScan();
                     }}
                 />
