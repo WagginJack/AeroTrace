@@ -150,7 +150,7 @@ const Track = ({ navigation }) => {
                     }
                     else if (incomingNotification.includes("LA:")) {
                         shiftFlag = false;
-                        incomingNotification = incomingNotification.substring(3);
+                        incomingNotification = incomingNotification.replace("LA:", "");
                         incomingNotification = parseFloat(incomingNotification);
                         tempLat = incomingNotification;
                         //setCurrentLatitude(incomingNotification);
@@ -209,7 +209,7 @@ const Track = ({ navigation }) => {
     
     
                     else if (incomingNotification.includes("AL:") && shiftFlag == false) {
-                        incomingNotification = incomingNotification.substring(3);
+                        incomingNotification = incomingNotification.replace("AL:", "");
                         incomingNotification = parseFloat(incomingNotification);
                         setCurrentAltitude(incomingNotification);
                         altitude.unshift(incomingNotification);
@@ -217,7 +217,7 @@ const Track = ({ navigation }) => {
     
                     }
                     else if (incomingNotification.includes("SP:") && shiftFlag == false) {
-                        incomingNotification = incomingNotification.substring(3);
+                        incomingNotification = incomingNotification.replace("SP:", "");
                         incomingNotification = parseFloat(incomingNotification);
                         setCurrentSpeed(incomingNotification);
                         speed.unshift(incomingNotification);
@@ -227,7 +227,7 @@ const Track = ({ navigation }) => {
                         }
                     }
                     else if (incomingNotification.includes("TA:") && shiftFlag == false) {
-                        incomingNotification = incomingNotification.substring(3);
+                        incomingNotification = incomingNotification.replace("TA:", "");
                         incomingNotification = parseFloat(incomingNotification);
                         setCurrentAngle(incomingNotification);
                         angle.unshift(incomingNotification);
