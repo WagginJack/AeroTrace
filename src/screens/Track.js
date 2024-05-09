@@ -45,6 +45,8 @@ const Track = ({ navigation }) => {
     const [currentAngle, setCurrentAngle] = useState(0);
     const [currentDistance, setDistance] = useState(0);
     const [coordinates, setCoordinates] = useState([]);
+    const [isConnected, setConnection] = useState(false);
+
 
     //phone location
     const [position, setPosition] = useState({
@@ -136,108 +138,118 @@ const Track = ({ navigation }) => {
 
     //Recives Data from MCU
     useEffect(() => {
-        const subscription = bleManagerEmitter.addListener(
-            'BleManagerDidUpdateValueForCharacteristic',
-            ({ value, peripheral, characteristic, service }) => {
-                //console.log(String.fromCharCode(...value)); //console logging received data
-                incomingNotification = (String.fromCharCode(...value));
-                if (incomingNotification.includes("Waiting")) {
-                    console.log(incomingNotification);
-                }
-                else if (incomingNotification.includes("LA:")) {
-                    shiftFlag = false;
-                    incomingNotification = incomingNotification.substring(3);
-                    incomingNotification = parseFloat(incomingNotification);
-                    tempLat = incomingNotification;
-                    //setCurrentLatitude(incomingNotification);
-                    console.log("Latitude: ", incomingNotification);
-                }
-                else if (incomingNotification.includes("LO:")) {
-                    //console.log(incomingNotification);
-                    //incomingNotification = incomingNotification.substring(5);
-                    incomingNotification = incomingNotification.replace("LO:", "");
-                    //console.log("before ParseFloat: " + incomingNotification);
-                    incomingNotification = parseFloat(incomingNotification);
-
-                    //setCurrentLongitude(incomingNotification);
-                    //console.log(Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]));
-                    console.log("Longitude: ", incomingNotification);
-                    //longitude.unshift(incomingNotification);
-                    //if (((typeof incomingNotification) != "number") || ((typeof tempLat) != "number")){
-                    if (!Number.isFinite(incomingNotification) || !Number.isFinite(tempLat)) {
-                        console.log("invalid lat/long");
+        if (isConnected) {
+            // Subscribe to the BLE device
+            const subscription = bleManagerEmitter.addListener(
+                'BleManagerDidUpdateValueForCharacteristic',
+                ({ value, peripheral, characteristic, service }) => {
+                    //console.log(String.fromCharCode(...value)); //console logging received data
+                    incomingNotification = (String.fromCharCode(...value));
+                    if (incomingNotification.includes("Waiting")) {
+                        console.log(incomingNotification);
                     }
-                    // else if (count > 0) {
-                    //     console.log("Lat&Long Difference: ",Math.abs(incomingNotification - currentLongitude) + Math.abs(tempLat - currentLatitude));
-                    //     if ((Math.abs(incomingNotification - currentLongitude) + Math.abs(tempLat - currentLatitude)) > 0.000000000) {
-                    //         //latitude.unshift(tempLat);
-                    //         //longitude.unshift(incomingNotification);
-                    //         //coordinates.unshift({ latitude: latitude[0], longitude: longitude[0] });
-                    //         //setCurrentCoordinate(coordinates[0]);
-                    //         setCurrentLongitude(incomingNotification);
-                    //         setCurrentLatitude(tempLat);
-                    //         updateCoordinates();
-                    //         console.log("Longitude: ", incomingNotification);
-                    //         count++;
-                    //     }
-                    // }
-                    else {
-                        //latitude.unshift(tempLat);
+                    else if (incomingNotification.includes("LA:")) {
+                        shiftFlag = false;
+                        incomingNotification = incomingNotification.substring(3);
+                        incomingNotification = parseFloat(incomingNotification);
+                        tempLat = incomingNotification;
+                        //setCurrentLatitude(incomingNotification);
+                        console.log("Latitude: ", incomingNotification);
+                    }
+                    else if (incomingNotification.includes("LO:")) {
+                        //console.log(incomingNotification);
+                        //incomingNotification = incomingNotification.substring(5);
+                        incomingNotification = incomingNotification.replace("LO:", "");
+                        //console.log("before ParseFloat: " + incomingNotification);
+                        incomingNotification = parseFloat(incomingNotification);
+    
+                        //setCurrentLongitude(incomingNotification);
+                        //console.log(Math.abs(incomingNotification - longitude[0]) + Math.abs(latitude[0] - latitude[1]));
+                        console.log("Longitude: ", incomingNotification);
                         //longitude.unshift(incomingNotification);
-                        setCurrentLatitude(tempLat);
-                        setCurrentLongitude(incomingNotification);
-                        //console.log("Adding Lat: " + currentLatitude + " and Long: " + currentLongitude);
-                        // let newCoordinate = {latitude: currentLatitude, longitude: currentLongitude};
-                        // console.log("New coordinates: ", newCoordinate);
-                        // setCoordinates(coordinates => [...coordinates, newCoordinate]);
-                        // console.log("All Coordinates are", coordinates);
-                        //updateCoordinates();nnnn    nn
-                        count++;
-
-
-                        //calculate Distance
-                        let calculatedDistance = Math.acos(Math.sin(currentLatitude) * Math.sin(firstLatitude) + Math.cos(currentLatitude) * Math.cos(firstLatitude) * Math.cos(currentLongitude - firstLongitude)) * 20902560;
-                        setDistance(calculatedDistance);
-
+                        //if (((typeof incomingNotification) != "number") || ((typeof tempLat) != "number")){
+                        if (!Number.isFinite(incomingNotification) || !Number.isFinite(tempLat)) {
+                            console.log("invalid lat/long");
+                        }
+                        // else if (count > 0) {
+                        //     console.log("Lat&Long Difference: ",Math.abs(incomingNotification - currentLongitude) + Math.abs(tempLat - currentLatitude));
+                        //     if ((Math.abs(incomingNotification - currentLongitude) + Math.abs(tempLat - currentLatitude)) > 0.000000000) {
+                        //         //latitude.unshift(tempLat);
+                        //         //longitude.unshift(incomingNotification);
+                        //         //coordinates.unshift({ latitude: latitude[0], longitude: longitude[0] });
+                        //         //setCurrentCoordinate(coordinates[0]);
+                        //         setCurrentLongitude(incomingNotification);
+                        //         setCurrentLatitude(tempLat);
+                        //         updateCoordinates();
+                        //         console.log("Longitude: ", incomingNotification);
+                        //         count++;
+                        //     }
+                        // }
+                        else {
+                            //latitude.unshift(tempLat);
+                            //longitude.unshift(incomingNotification);
+                            setCurrentLatitude(tempLat);
+                            setCurrentLongitude(incomingNotification);
+                            //console.log("Adding Lat: " + currentLatitude + " and Long: " + currentLongitude);
+                            // let newCoordinate = {latitude: currentLatitude, longitude: currentLongitude};
+                            // console.log("New coordinates: ", newCoordinate);
+                            // setCoordinates(coordinates => [...coordinates, newCoordinate]);
+                            // console.log("All Coordinates are", coordinates);
+                            //updateCoordinates();nnnn    nn
+                            count++;
+    
+    
+                            //calculate Distance
+                            let calculatedDistance = Math.acos(Math.sin(currentLatitude) * Math.sin(firstLatitude) + Math.cos(currentLatitude) * Math.cos(firstLatitude) * Math.cos(currentLongitude - firstLongitude)) * 20902560;
+                            setDistance(calculatedDistance);
+    
+                        }
+                    }
+    
+    
+    
+                    else if (incomingNotification.includes("AL:") && shiftFlag == false) {
+                        incomingNotification = incomingNotification.substring(3);
+                        incomingNotification = parseFloat(incomingNotification);
+                        setCurrentAltitude(incomingNotification);
+                        altitude.unshift(incomingNotification);
+                        console.log("Altitude: ", incomingNotification);
+    
+                    }
+                    else if (incomingNotification.includes("SP:") && shiftFlag == false) {
+                        incomingNotification = incomingNotification.substring(3);
+                        incomingNotification = parseFloat(incomingNotification);
+                        setCurrentSpeed(incomingNotification);
+                        speed.unshift(incomingNotification);
+                        console.log("Speed: ", incomingNotification);
+                        if (maxSpeed < incomingNotification) {
+                            setMaxSpeed(incomingNotification);
+                        }
+                    }
+                    else if (incomingNotification.includes("TA:") && shiftFlag == false) {
+                        incomingNotification = incomingNotification.substring(3);
+                        incomingNotification = parseFloat(incomingNotification);
+                        setCurrentAngle(incomingNotification);
+                        angle.unshift(incomingNotification);
+                        console.log("Track Angle: ", incomingNotification);
+    
+                    }
+                    else {
+                        console.log(incomingNotification)
                     }
                 }
+            );
+    
+            // Return a cleanup function that will be called when the phone disconnects from the BLE device
+            return () => {
+                subscription.remove();
+                setConnection(false);
+            };
+        }
+    }, [isConnected]); // Runs whenever isConnected changes
 
 
-
-                else if (incomingNotification.includes("AL:") && shiftFlag == false) {
-                    incomingNotification = incomingNotification.substring(3);
-                    incomingNotification = parseFloat(incomingNotification);
-                    setCurrentAltitude(incomingNotification);
-                    altitude.unshift(incomingNotification);
-                    console.log("Altitude: ", incomingNotification);
-
-                }
-                else if (incomingNotification.includes("SP:") && shiftFlag == false) {
-                    incomingNotification = incomingNotification.substring(3);
-                    incomingNotification = parseFloat(incomingNotification);
-                    setCurrentSpeed(incomingNotification);
-                    speed.unshift(incomingNotification);
-                    console.log("Speed: ", incomingNotification);
-                    if (maxSpeed < incomingNotification) {
-                        setMaxSpeed(incomingNotification);
-                    }
-                }
-                else if (incomingNotification.includes("TA:") && shiftFlag == false) {
-                    incomingNotification = incomingNotification.substring(3);
-                    incomingNotification = parseFloat(incomingNotification);
-                    setCurrentAngle(incomingNotification);
-                    angle.unshift(incomingNotification);
-                    console.log("Track Angle: ", incomingNotification);
-
-                }
-                else {
-                    console.log(incomingNotification)
-                }
-            }
-        );
-        // Clean up the listener on component unmount
-        return () => subscription.remove();
-    }, []); // Re-run the effect when `NotificationOn` changes
+    
 
     const startScan = () => {
         setScanning(true);
@@ -284,6 +296,7 @@ const Track = ({ navigation }) => {
                 BleManager.startNotification(device.id, serviceUUID, characteristicUUID).then(() => {
                     console.log('Notifications started');
                     console.log("Device ID: ", device.id);
+                    setConnection(true);
                     //setNotificationOn(true); // This will cause a re-render
                 }).catch((error) => {
                     console.log('Failed to start notifications:', error);
