@@ -56,12 +56,13 @@ const Track = ({ navigation }) => {
     //update phone location
     useEffect(() => {
         Geolocation.getCurrentPosition((pos) => {
+          console.log("geolocation lat: " + pos.coords.latitude + " long: " + pos.coords.longitude)
           const crd = pos.coords;
           setPosition({
             latitude: crd.latitude,
             longitude: crd.longitude,
           });
-          console.log("lat: " + crd.latitude + " long: " + crd.longitude)
+          console.log("lat: " + crd.latitude + " long: " + crd.longitude);
         })
       }, []);
 
@@ -242,10 +243,18 @@ const Track = ({ navigation }) => {
     
             // Return a cleanup function that will be called when the phone disconnects from the BLE device
             return () => {
+                console.log("disconnected");
                 subscription.remove();
                 setConnection(false);
             };
         }
+        // else
+        // {
+        //     subscription.remove();
+        //     setConnection(false);
+        //     console.log("Not Connected");
+
+        // }
     }, [isConnected]); // Runs whenever isConnected changes
 
 
@@ -433,6 +442,8 @@ const Track = ({ navigation }) => {
                         console.log("Reconnecting to: ", BLEname);
                         //stopNotificattion()
                         //startScan();
+
+                        setConnection(false);
                         connectToDevice(theDevice);
                     }}
                 />
@@ -443,6 +454,7 @@ const Track = ({ navigation }) => {
                     title="Scan"
                     onPress={() => {
                         console.log("Rescanning for: ", BLEname);
+                        setConnection(false);
                         //stopNotificattion()
                         //startScan();
                         startScan();
