@@ -138,7 +138,7 @@ const Track = ({ navigation }) => {
 
     //Recives Data from MCU
     useEffect(() => {
-        if (isConnected) {
+        if (isConnected == true) {
             // Subscribe to the BLE device
             const subscription = bleManagerEmitter.addListener(
                 'BleManagerDidUpdateValueForCharacteristic',
