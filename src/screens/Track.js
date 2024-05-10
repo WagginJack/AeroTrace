@@ -137,6 +137,26 @@ const Track = ({ navigation }) => {
         }
     }, [currentLongitude]);
 
+    // Start observing device connection state
+    const handleDisconnectedPeripheral = (data) => {
+        console.log('Disconnected from ' + data.peripheral);
+        if (data.peripheral === yourDeviceId) {
+            setConnected(false); // Replace with your state update function
+            console.log("Disconnected from device in handleDisconnectedPeripheral")
+        }
+    }
+    //on disconnect
+    useEffect(() => {
+        const listener = bleManagerEmitter.addListener(
+            'BleManagerDisconnectPeripheral',
+            handleDisconnectedPeripheral
+        );
+
+        return () => {
+            listener.remove();
+        };
+    }, []);
+
     //Recives Data from MCU
     useEffect(() => {
         if (isConnected == true) {
@@ -243,7 +263,6 @@ const Track = ({ navigation }) => {
     
             // Return a cleanup function that will be called when the phone disconnects from the BLE device
             return () => {
-                console.log("disconnected");
                 subscription.remove();
                 console.log("Disconnected from device")
                 setConnection(false);
