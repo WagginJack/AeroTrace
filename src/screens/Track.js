@@ -245,6 +245,7 @@ const Track = ({ navigation }) => {
             return () => {
                 console.log("disconnected");
                 subscription.remove();
+                console.log("Disconnected from device")
                 setConnection(false);
             };
         }
